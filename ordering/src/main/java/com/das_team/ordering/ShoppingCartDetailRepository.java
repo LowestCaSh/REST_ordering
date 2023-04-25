@@ -29,4 +29,14 @@ public class ShoppingCartDetailRepository {
 	    }
 	    return cartDetailsByCartId;
     }
+	
+	public float getCartDetailsSum(int cartId) {
+		float shoppingCartDetailsSum = 0f;
+		for (ShoppingCartDetail cartDetail : cartDetails) {
+	        if (cartDetail.getCartId() == cartId) {
+	            shoppingCartDetailsSum += cartDetail.getUnitprice() * cartDetail.getQuantity();
+	        }
+	    }
+		return shoppingCartDetailsSum;
+	}
 }

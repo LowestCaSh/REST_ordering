@@ -25,4 +25,14 @@ public class OrderDetailRepository {
 	    }
 	    return orderDetailsByOrderId;
     }
+	
+	public float getOrderDetailsSum(int orderId) {
+		float orderDetailSum = 0f;
+		for (OrderDetail orderDetail : orderDetails) {
+	        if (orderDetail.getOrderId() == orderId) {
+	            orderDetailSum += orderDetail.getUnitprice() * orderDetail.getQuantity();
+	        }
+	    }
+		return orderDetailSum;
+	}
 }

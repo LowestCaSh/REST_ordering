@@ -10,10 +10,10 @@ public class ShoppingCartRepository{
 	
 	public ShoppingCartRepository() {
 		carts = new ArrayList<>();
-		carts.add(new ShoppingCart(1, 3, cartDetailRepository.getCartDetailsByCartId(1), 99.99f, "2024-12-13"));
-		carts.add(new ShoppingCart(2, 9, cartDetailRepository.getCartDetailsByCartId(2), 10.99f, "1997-01-01"));
-		carts.add(new ShoppingCart(3, 27, cartDetailRepository.getCartDetailsByCartId(3), 20.99f, "2001-06-09"));
-		carts.add(new ShoppingCart(4, 14, cartDetailRepository.getCartDetailsByCartId(4), 15.99f, "1994-08-27"));
+		carts.add(new ShoppingCart(1, 3, cartDetailRepository.getCartDetailsByCartId(1), cartDetailRepository.getCartDetailsSum(1), "2024-12-13"));
+		carts.add(new ShoppingCart(2, 9, cartDetailRepository.getCartDetailsByCartId(2), cartDetailRepository.getCartDetailsSum(2), "1997-01-01"));
+		carts.add(new ShoppingCart(3, 27, cartDetailRepository.getCartDetailsByCartId(3), cartDetailRepository.getCartDetailsSum(3), "2001-06-09"));
+		carts.add(new ShoppingCart(4, 14, cartDetailRepository.getCartDetailsByCartId(4), cartDetailRepository.getCartDetailsSum(4), "1994-08-27"));
 	}
 	
 	public List<ShoppingCart> getAllCarts() {
