@@ -17,13 +17,13 @@ public class ShoppingCartController {
 	private ShoppingCartRepository cartRepository = new ShoppingCartRepository();
 	
 	@ApiOperation(value = "Returns all ShoppingCarts")
-    @GetMapping ("ordering/carts")
+    @GetMapping ("carts")
     public List<ShoppingCart> getAllCarts() {
         return cartRepository.getAllCarts();
     }
     
 	@ApiOperation(value = "Returns the ShoppingCart with the specified Id")
-    @GetMapping("ordering/carts/{id}")
+    @GetMapping("carts/{id}")
     public ResponseEntity<ShoppingCart> getCartById(@PathVariable int id) {
         ShoppingCart cart = cartRepository.getCartById(id);
         if (cart == null) {

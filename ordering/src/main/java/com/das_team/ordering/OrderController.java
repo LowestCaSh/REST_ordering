@@ -18,13 +18,13 @@ public class OrderController {
 	private OrderRepository orderRepository = new OrderRepository();
 	
 	@ApiOperation(value = "Returns all Orders")
-    @GetMapping ("ordering/orders")
+    @GetMapping ("orders")
     public List<Order> getAllOrders() {
         return orderRepository.getAllOrders();
     }
     
 	@ApiOperation(value = "Returns the Order with the specified Id")
-    @GetMapping("ordering/orders/{id}")
+    @GetMapping("orders/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable int id) {
         Order order = orderRepository.getOrderById(id);
         if (order == null) {
