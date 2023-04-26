@@ -14,17 +14,12 @@ public class ShoppingCartController {
 	
 	private ShoppingCartRepository cartRepository = new ShoppingCartRepository();
 	
-    @GetMapping ("carts")
+    @GetMapping ("ordering/carts")
     public List<ShoppingCart> getAllCarts() {
         return cartRepository.getAllCarts();
     }
     
-    @GetMapping ("carts/ids")
-    public List<Integer> getAllCartIds() {
-        return cartRepository.getAllCartIDs();
-    }
-    
-    @GetMapping("/carts/{id}")
+    @GetMapping("ordering/carts/{id}")
     public ResponseEntity<ShoppingCart> getCartById(@PathVariable int id) {
         ShoppingCart cart = cartRepository.getCartById(id);
         if (cart == null) {
@@ -32,10 +27,5 @@ public class ShoppingCartController {
         } else {
             return new ResponseEntity<>(cart, HttpStatus.OK);
         }
-    }
-    
-    @GetMapping ("carts/last_updated")
-    public List<String> getAllLastUpdated() {
-        return cartRepository.getAllCartLastUpdated();
     }
 }

@@ -14,12 +14,12 @@ public class OrderController {
 	
 	private OrderRepository orderRepository = new OrderRepository();
 	
-    @GetMapping ("orders")
+    @GetMapping ("ordering/orders")
     public List<Order> getAllOrders() {
         return orderRepository.getAllOrders();
     }
        
-    @GetMapping("/orders/{id}")
+    @GetMapping("ordering/orders/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable int id) {
         Order order = orderRepository.getOrderById(id);
         if (order == null) {
