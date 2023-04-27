@@ -18,6 +18,11 @@ public class ShoppingCart {
         this.lastUpdated = lastUpdated;
         
     }
+    
+    //Default Constructor needed for @PostMappings
+  	public ShoppingCart() {
+  		
+  	}
 
     public int getCartId() {
         return cartId;

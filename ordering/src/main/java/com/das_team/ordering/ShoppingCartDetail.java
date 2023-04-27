@@ -17,6 +17,11 @@ public class ShoppingCartDetail {
 		this.unitprice = unitprice;
 		this.quantity = quantity;
 	}
+	
+	//Default Constructor needed for @PostMappings
+	public ShoppingCartDetail() {
+		
+	}
 
 	public int getCartId() {
 		return cartId;

@@ -34,6 +34,11 @@ public class Order {
         this.totalSum = totalSum;
         
     }
+    
+  //Default Constructor needed for @PostMappings
+  	public Order() {
+  		
+  	}
 
 	public int getOrderId() {
 		return orderId;

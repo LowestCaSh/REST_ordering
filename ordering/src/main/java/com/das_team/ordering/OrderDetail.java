@@ -17,6 +17,11 @@ public class OrderDetail {
 		this.unitprice = unitprice;
 		this.quantity = quantity;
 	}
+	
+	//Default Constructor needed for @PostMappings
+	public OrderDetail() {
+		
+	}
 
 	public int getOrderId() {
 		return orderId;

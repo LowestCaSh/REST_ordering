@@ -59,6 +59,24 @@ public class ShoppingCartController {
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+	
+	@Operation(summary = "Adds a new ShoppingCartDetail for the Specified ShoppingCart (cartId)",
+			responses = { 
+				    @ApiResponse(responseCode="201", description = "ShoppingCartDetail added successfully"),
+				    @ApiResponse(responseCode="400", description = "Invalid input provided"),
+				    @ApiResponse(responseCode="404", description = "Specified ShoppingCart does not exist"),
+				    @ApiResponse(responseCode="500", description = "Internal Server Error")
+				})
+	@PostMapping("/carts/{cartId}/details")
+	public ResponseEntity<ShoppingCartDetail> addShoppingCartDetail(@PathVariable int cartId, @RequestBody ShoppingCartDetail shoppingCartDetail) {
+		if(cartRepository.getCartById(cartId) != null) {
+			cartDetailRepository.addShoppingCartDetail(shoppingCartDetail);
+			return new ResponseEntity<>(shoppingCartDetail, HttpStatus.CREATED);
+		}
+		else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    
+	}
+	
 	/*
 	@Operation(summary = "Creates a new ShoppingCart")
 	@PostMapping("/carts")

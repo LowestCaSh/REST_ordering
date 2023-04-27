@@ -61,6 +61,23 @@ public class OrderController {
         }
         else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+	
+	@Operation(summary = "Adds a new OrderDetail for the Specified Order (orderId)",
+			responses = { 
+				    @ApiResponse(responseCode="201", description = "OrderDetail added successfully"),
+				    @ApiResponse(responseCode="400", description = "Invalid input provided"),
+				    @ApiResponse(responseCode="404", description = "Specified Order does not exist"),
+				    @ApiResponse(responseCode="500", description = "Internal Server Error")
+				})
+	@PostMapping("orders/{orderId}/details")
+	public ResponseEntity<OrderDetail> addOrderDetail(@PathVariable int orderId, @RequestBody OrderDetail orderDetail) {
+		if(orderRepository.getOrderById(orderId) != null) {
+			orderDetailRepository.addOrderDetail(orderDetail);
+			return new ResponseEntity<>(orderDetail, HttpStatus.CREATED);
+		}
+		else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    
+	}
 
 	/*
 	@Operation(summary = "Creates a new Order")

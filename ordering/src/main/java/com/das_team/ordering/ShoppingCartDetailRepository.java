@@ -38,4 +38,8 @@ public class ShoppingCartDetailRepository {
 	    }
 		return shoppingCartDetailsSum;
 	}
+	
+	public void addShoppingCartDetail(ShoppingCartDetail shoppingCartDetail) {
+		cartDetails.add(shoppingCartDetail);
+	}
 }
