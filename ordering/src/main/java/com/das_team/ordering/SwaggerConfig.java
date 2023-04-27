@@ -1,38 +1,28 @@
 package com.das_team.ordering;
 
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import java.util.Collections;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.*;
+import io.swagger.v3.oas.annotations.*;
+import io.swagger.v3.oas.annotations.info.*;
 
-@EnableSwagger2
+@Configuration
+@OpenAPIDefinition(info=@Info(
+		title="Endpoints for Orders and ShoppingCarts",
+		description="Returns Information about Orders and ShoppingCarts for our REST API study project",
+		version="1.0.0",
+		contact=@Contact(name="Lukas und Fabian", url="https://mattermost.gitlab.rlp.net/vis-ss23/channels/town-square")
+))
+
 public class SwaggerConfig {
 	
-	@Bean
-	public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.OAS_30)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.das_team.ordering"))
                 .paths(PathSelectors.any())
-                .build()
-                .apiInfo(metaInfo());
+                .build();
     }
-	
-	private ApiInfo metaInfo() {
-	    return new ApiInfo(
-	    		"Endpoints for Orders and ShoppingCarts",
-	            "Returns Information about Orders and ShoppingCarts for our REST API study project",
-	            "1.0",
-	            "Terms of Service",
-	            new Contact("Lukas und Fabian", "E-Mails", "luko0005 und faam0004"),
-	            "No License",
-	            "No License url",
-	            Collections.emptyList()
-	    );
-	}
 }

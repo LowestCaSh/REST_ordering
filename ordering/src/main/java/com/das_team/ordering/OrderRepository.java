@@ -26,4 +26,8 @@ public class OrderRepository{
 	    }
 	    return null;
     }
+	
+	public void addOrder(Order order) {
+		orders.add(order);
+	}
 }

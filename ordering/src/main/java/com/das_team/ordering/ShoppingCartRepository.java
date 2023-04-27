@@ -45,11 +45,12 @@ public class ShoppingCartRepository{
 	    return cartUpdates;
     }
 	
-	/*
+	
 	public void addCart(ShoppingCart cart) {
-       
+       carts.add(cart);
     }
-
+	
+	/*
     public void deleteCart(int cartId) {
         
     }

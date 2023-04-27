@@ -2,28 +2,23 @@ package com.das_team.ordering;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import io.swagger.annotations.ApiOperation;
-
+import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.HttpStatus;
-
 
 @RestController
 public class OrderController {
 	
 	private OrderRepository orderRepository = new OrderRepository();
 	
-	@ApiOperation(value = "Returns all Orders")
+	@Operation(summary = "Returns all Orders")
     @GetMapping ("orders")
     public List<Order> getAllOrders() {
         return orderRepository.getAllOrders();
     }
     
-	@ApiOperation(value = "Returns the Order with the specified Id")
+	@Operation(summary = "Returns the Order with the specified Id")
     @GetMapping("orders/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable int id) {
         Order order = orderRepository.getOrderById(id);
@@ -33,4 +28,12 @@ public class OrderController {
             return new ResponseEntity<>(order, HttpStatus.OK);
         }
     }
+	/*
+	@Operation(summary = "Creates a new Order")
+	@PostMapping("/orders")
+	public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+	    orderRepository.addOrder(order);
+	    return new ResponseEntity<>(order, HttpStatus.CREATED);
+	}
+	*/
 }

@@ -35,4 +35,9 @@ public class OrderDetailRepository {
 	    }
 		return orderDetailSum;
 	}
+	
+	public void addOrderDetail(OrderDetail orderDetail) {
+			orderDetails.add(orderDetail);
+
+	}
 }
