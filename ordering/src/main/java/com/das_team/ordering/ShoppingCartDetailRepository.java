@@ -20,7 +20,6 @@ public class ShoppingCartDetailRepository {
 	}
 	
 	public List<ShoppingCartDetail> getCartDetailsByCartId(int cartId) {
-		
 		List<ShoppingCartDetail> cartDetailsByCartId = new ArrayList<>();
 		for (ShoppingCartDetail cartDetail : cartDetails) {
 	        if (cartDetail.getCartId() == cartId) {

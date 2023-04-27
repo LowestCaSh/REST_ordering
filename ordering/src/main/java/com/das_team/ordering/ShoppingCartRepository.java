@@ -14,6 +14,7 @@ public class ShoppingCartRepository{
 		carts.add(new ShoppingCart(2, 9, cartDetailRepository.getCartDetailsByCartId(2), cartDetailRepository.getCartDetailsSum(2), "1997-01-01"));
 		carts.add(new ShoppingCart(3, 27, cartDetailRepository.getCartDetailsByCartId(3), cartDetailRepository.getCartDetailsSum(3), "2001-06-09"));
 		carts.add(new ShoppingCart(4, 14, cartDetailRepository.getCartDetailsByCartId(4), cartDetailRepository.getCartDetailsSum(4), "1994-08-27"));
+		carts.add(new ShoppingCart(5, 23, cartDetailRepository.getCartDetailsByCartId(5), cartDetailRepository.getCartDetailsSum(5), "1994-08-27"));
 	}
 	
 	public List<ShoppingCart> getAllCarts() {

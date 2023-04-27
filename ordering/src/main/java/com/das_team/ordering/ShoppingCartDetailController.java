@@ -5,22 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 
 @RestController
 public class ShoppingCartDetailController {
 	
 	private ShoppingCartDetailRepository cartDetailRepository = new ShoppingCartDetailRepository();
-	 
-	@Operation(summary = "Returns all ShoppingCartDetails from the specified ShoppingCart (cartId)")
-    @GetMapping("carts/{cartId}/details")
-    public ResponseEntity<List<ShoppingCartDetail>> getOrderDetailsByOrderId(@PathVariable int cartId) {
-        List<ShoppingCartDetail> cartDetails = cartDetailRepository.getCartDetailsByCartId(cartId);
-        if (cartDetails == null || cartDetails.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(cartDetails, HttpStatus.OK);
-        }
-    }
+
 	/*
 	@Operation(summary = "Creates a new OrderDetail")
 	@PostMapping("/order")
