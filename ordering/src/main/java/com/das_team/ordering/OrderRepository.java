@@ -28,6 +28,13 @@ public class OrderRepository{
     }
 	
 	public void addOrder(Order order) {
+		//First we need to change the Id of all OrderDetails to the one of the Order. This should not be an issue normally and is just a workaround for now
+		List<OrderDetail> newOrderDetails = order.getOrderDetails();
+	    for (OrderDetail orderDetail : newOrderDetails) {
+	        orderDetail.setOrderId(order.getOrderId());
+	    }
+	    orderDetailRepository.addOrderDetail(newOrderDetails); //We need to add the provided Details separately
+		order.setTotalSum(orderDetailRepository.getOrderDetailsSum(order.getOrderId())); //Calculate the TotalSum of the Order
 		orders.add(order);
 	}
 }

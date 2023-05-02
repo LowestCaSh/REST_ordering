@@ -77,12 +77,15 @@ public class ShoppingCartController {
 	    
 	}
 	
-	/*
-	@Operation(summary = "Creates a new ShoppingCart")
+	@Operation(summary = "Creates a new ShoppingCart",
+			responses = { 
+				    @ApiResponse(responseCode="201", description = "ShoppingCart created successfully, TotalSum calculated automatically, Id of ShoppingCartDetails changed according to Id of ShoppingCart"),
+				    @ApiResponse(responseCode="400", description = "Invalid input provided"),
+				    @ApiResponse(responseCode="500", description = "Internal Server Error")
+				})
 	@PostMapping("/carts")
-	public ResponseEntity<ShoppingCart> createCart(@RequestBody ShoppingCart cart) {
-	    cartRepository.addCart(cart);
+	public ResponseEntity<ShoppingCart> createShoppingCart(@RequestBody ShoppingCart cart) {
+	    cartRepository.addShoppingCart(cart);
 	    return new ResponseEntity<>(cart, HttpStatus.CREATED);
 	}
-	*/
 }

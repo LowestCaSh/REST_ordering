@@ -47,9 +47,16 @@ public class ShoppingCartRepository{
     }
 	
 	
-	public void addCart(ShoppingCart cart) {
-       carts.add(cart);
-    }
+	public void addShoppingCart(ShoppingCart cart) {
+		//First we need to change the Id of all ShoppingCartDetails to the one of the ShoppingCart. This should not be an issue normally and is just a workaround for now
+		List<ShoppingCartDetail> newShoppingCartDetails = cart.getCartDetails();
+	    for (ShoppingCartDetail shoppingCartDetail : newShoppingCartDetails) {
+	    	shoppingCartDetail.setCartId(cart.getCartId());
+	    }
+	    cartDetailRepository.addShoppingCartDetail(newShoppingCartDetails); //We need to add the provided Details separately
+		cart.setTotalSum(cartDetailRepository.getCartDetailsSum(cart.getCartId())); //Calculate the TotalSum of the ShoppingCart
+		carts.add(cart);
+	}
 	
 	/*
     public void deleteCart(int cartId) {

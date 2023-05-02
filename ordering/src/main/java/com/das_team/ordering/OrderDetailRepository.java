@@ -40,4 +40,8 @@ public class OrderDetailRepository {
 			orderDetails.add(orderDetail);
 
 	}
+	
+	public void addOrderDetail(List<OrderDetail> orderDetail) {
+		orderDetails.addAll(orderDetail);
+	}
 }

@@ -30,7 +30,7 @@ public class ShoppingCartDetailRepository {
     }
 	
 	public float getCartDetailsSum(int cartId) {
-		float shoppingCartDetailsSum = 0f;
+		float shoppingCartDetailsSum = 0;
 		for (ShoppingCartDetail cartDetail : cartDetails) {
 	        if (cartDetail.getCartId() == cartId) {
 	            shoppingCartDetailsSum += cartDetail.getUnitprice() * cartDetail.getQuantity();
@@ -41,5 +41,9 @@ public class ShoppingCartDetailRepository {
 	
 	public void addShoppingCartDetail(ShoppingCartDetail shoppingCartDetail) {
 		cartDetails.add(shoppingCartDetail);
+	}
+	
+	public void addShoppingCartDetail(List<ShoppingCartDetail> shoppingCartDetail) {
+		cartDetails.addAll(shoppingCartDetail);
 	}
 }

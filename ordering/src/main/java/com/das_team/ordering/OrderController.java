@@ -79,12 +79,15 @@ public class OrderController {
 	    
 	}
 
-	/*
-	@Operation(summary = "Creates a new Order")
+	@Operation(summary = "Creates a new Order",
+			responses = { 
+				    @ApiResponse(responseCode="201", description = "Order created successfully, TotalSum calculated automatically, Id of OrderDetails changed according to Id of Order"),
+				    @ApiResponse(responseCode="400", description = "Invalid input provided"),
+				    @ApiResponse(responseCode="500", description = "Internal Server Error")
+				})
 	@PostMapping("/orders")
 	public ResponseEntity<Order> createOrder(@RequestBody Order order) {
 	    orderRepository.addOrder(order);
 	    return new ResponseEntity<>(order, HttpStatus.CREATED);
 	}
-	*/
 }
