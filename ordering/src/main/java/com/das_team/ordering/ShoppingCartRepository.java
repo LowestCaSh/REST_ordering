@@ -46,9 +46,20 @@ public class ShoppingCartRepository{
 	    return cartUpdates;
     }
 	
+	public int getHighestShoppingCartId() {
+	    int highestId = 0;
+	    for (ShoppingCart cart : carts) {
+	        if (cart.getCartId() > highestId) {
+	            highestId = cart.getCartId();
+	        }
+	    }
+	    return highestId;
+	}
 	
 	public void addShoppingCart(ShoppingCart cart) {
-		//First we need to change the Id of all ShoppingCartDetails to the one of the ShoppingCart. This should not be an issue normally and is just a workaround for now
+		//Set the ShoppingCartId automatically
+		cart.setCartId(getHighestShoppingCartId() + 1);
+		//First we need to change the Id of all ShoppingCartDetails to the one of the ShoppingCart
 		List<ShoppingCartDetail> newShoppingCartDetails = cart.getCartDetails();
 	    for (ShoppingCartDetail shoppingCartDetail : newShoppingCartDetails) {
 	    	shoppingCartDetail.setCartId(cart.getCartId());

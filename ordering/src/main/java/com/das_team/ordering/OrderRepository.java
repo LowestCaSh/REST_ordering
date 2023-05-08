@@ -27,8 +27,21 @@ public class OrderRepository{
 	    return null;
     }
 	
+
+	public int getHighestOrderId() {
+	    int highestId = 0;
+	    for (Order order : orders) {
+	        if (order.getOrderId() > highestId) {
+	            highestId = order.getOrderId();
+	        }
+	    }
+	    return highestId;
+	}
+	
 	public void addOrder(Order order) {
-		//First we need to change the Id of all OrderDetails to the one of the Order. This should not be an issue normally and is just a workaround for now
+		//Set the OrderId automatically
+		order.setOrderId(getHighestOrderId() + 1);
+		//Change the Id of all OrderDetails to the one of the Order
 		List<OrderDetail> newOrderDetails = order.getOrderDetails();
 	    for (OrderDetail orderDetail : newOrderDetails) {
 	        orderDetail.setOrderId(order.getOrderId());

@@ -81,7 +81,7 @@ public class OrderController {
 
 	@Operation(summary = "Creates a new Order",
 			responses = { 
-				    @ApiResponse(responseCode="201", description = "Order created successfully, TotalSum calculated automatically, Id of OrderDetails changed according to Id of Order"),
+				    @ApiResponse(responseCode="201", description = "Order created successfully, TotalSum calculated automatically, Id of Order set automatically"),
 				    @ApiResponse(responseCode="400", description = "Invalid input provided"),
 				    @ApiResponse(responseCode="500", description = "Internal Server Error")
 				})

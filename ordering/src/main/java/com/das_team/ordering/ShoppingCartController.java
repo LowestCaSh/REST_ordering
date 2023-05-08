@@ -79,7 +79,7 @@ public class ShoppingCartController {
 	
 	@Operation(summary = "Creates a new ShoppingCart",
 			responses = { 
-				    @ApiResponse(responseCode="201", description = "ShoppingCart created successfully, TotalSum calculated automatically, Id of ShoppingCartDetails changed according to Id of ShoppingCart"),
+				    @ApiResponse(responseCode="201", description = "ShoppingCart created successfully, TotalSum calculated automatically, Id of ShoppingCart set automatically"),
 				    @ApiResponse(responseCode="400", description = "Invalid input provided"),
 				    @ApiResponse(responseCode="500", description = "Internal Server Error")
 				})
