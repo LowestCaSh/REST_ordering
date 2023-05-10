@@ -50,4 +50,8 @@ public class OrderRepository{
 		order.setTotalSum(orderDetailRepository.getOrderDetailsSum(order.getOrderId())); //Calculate the TotalSum of the Order
 		orders.add(order);
 	}
+	
+	public void deleteOrder(int orderId) {
+		orders.remove(getOrderById(orderId));
+	}
 }

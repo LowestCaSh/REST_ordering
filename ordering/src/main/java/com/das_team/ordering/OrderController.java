@@ -90,4 +90,19 @@ public class OrderController {
 	    orderRepository.addOrder(order);
 	    return new ResponseEntity<>(order, HttpStatus.CREATED);
 	}
+	
+	@Operation(summary = "Deletes an existing Order",
+			responses = { 
+				    @ApiResponse(responseCode="200", description = "Order deleted succesfully"),
+				    @ApiResponse(responseCode="400", description = "Invalid input provided"),
+				    @ApiResponse(responseCode="500", description = "Internal Server Error")
+				})
+	@DeleteMapping("/orders")
+	public ResponseEntity<Order> deleteOrder(@RequestBody int orderId) {
+		if(orderRepository.getOrderById(orderId) != null) {
+			orderRepository.deleteOrder(orderId);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
 }
