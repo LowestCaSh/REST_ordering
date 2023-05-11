@@ -46,4 +46,14 @@ public class ShoppingCartDetailRepository {
 	public void addShoppingCartDetail(List<ShoppingCartDetail> shoppingCartDetail) {
 		cartDetails.addAll(shoppingCartDetail);
 	}
+	
+	
+	public void removeShoppingCartDetail(int cartId, int productId) {
+		for(ShoppingCartDetail shoppingCartDetail : cartDetails) {
+			if(shoppingCartDetail.getCartId() == cartId && shoppingCartDetail.getProductId() == productId) {
+				cartDetails.remove(shoppingCartDetail);
+				break;
+			}
+		}
+	}
 }

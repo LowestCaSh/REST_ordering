@@ -17,7 +17,6 @@ public class OrderDetailRepository {
 	
 	public List<OrderDetail> getOrderDetailsByOrderId(int orderId) {
 		List<OrderDetail> orderDetailsByOrderId = new ArrayList<>();
-		
 		for (OrderDetail orderDetail : orderDetails) {
 	        if (orderDetail.getOrderId() == orderId) {
 	            orderDetailsByOrderId.add(orderDetail);
@@ -41,7 +40,19 @@ public class OrderDetailRepository {
 
 	}
 	
-	public void addOrderDetail(List<OrderDetail> orderDetail) {
-		orderDetails.addAll(orderDetail);
+	public void addOrderDetail(List<OrderDetail> orderDetails) {
+		orderDetails.addAll(orderDetails);
+	}
+	
+	public void addOrderDetailsFromShoppingCart(int orderId, List<ShoppingCartDetail> shoppingCartDetails) {
+		for (ShoppingCartDetail shoppingCartDetail : shoppingCartDetails) {
+			orderDetails.add(new OrderDetail(
+					orderId,
+					shoppingCartDetail.getProductId(),
+					shoppingCartDetail.getProductName(),
+					shoppingCartDetail.getUnit(),
+					shoppingCartDetail.getUnitprice(),
+					shoppingCartDetail.getQuantity()));
+	    }	
 	}
 }

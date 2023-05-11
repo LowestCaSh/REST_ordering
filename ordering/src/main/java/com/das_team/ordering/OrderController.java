@@ -14,6 +14,7 @@ public class OrderController {
 	
 	private OrderRepository orderRepository = new OrderRepository();
 	private OrderDetailRepository orderDetailRepository = new OrderDetailRepository();
+	private ShoppingCartRepository cartRepository = new ShoppingCartRepository();
 	
 	@Operation(summary = "Returns all Orders",
 			responses = { 
@@ -44,6 +45,7 @@ public class OrderController {
         }
     }
 	
+	/*
 	@Operation(
 		summary = "Returns all OrderDetails from the specified Order (orderId)",
 		responses = { 
@@ -60,11 +62,11 @@ public class OrderController {
             return new ResponseEntity<>(orderDetails, HttpStatus.OK);
         }
         else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    }*/
 	
 	@Operation(summary = "Adds a new OrderDetail for the Specified Order (orderId)",
 			responses = { 
-				    @ApiResponse(responseCode="201", description = "OrderDetail added successfully"),
+				    @ApiResponse(responseCode="201", description = "OrderDetail added successfully, Id changed according to chosen PathVariable"),
 				    @ApiResponse(responseCode="400", description = "Invalid input provided"),
 				    @ApiResponse(responseCode="404", description = "Specified Order does not exist"),
 				    @ApiResponse(responseCode="500", description = "Internal Server Error")
@@ -72,36 +74,30 @@ public class OrderController {
 	@PostMapping("orders/{orderId}/details")
 	public ResponseEntity<OrderDetail> addOrderDetail(@PathVariable int orderId, @RequestBody OrderDetail orderDetail) {
 		if(orderRepository.getOrderById(orderId) != null) {
+			orderDetail.setOrderId(orderId);
 			orderDetailRepository.addOrderDetail(orderDetail);
+			//Add it to the orderDetailsList
+			orderRepository.getOrderById(orderId).setOrderDetails(orderDetailRepository.getOrderDetailsByOrderId(orderId));
+			//Recalculate TotalSum
+			orderRepository.getOrderById(orderId).setTotalSum(orderDetailRepository.getOrderDetailsSum(orderId));
 			return new ResponseEntity<>(orderDetail, HttpStatus.CREATED);
 		}
 		else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    
 	}
 
-	@Operation(summary = "Creates a new Order",
+	@Operation(summary = "Creates a new Order from specified ShoppingCart",
 			responses = { 
-				    @ApiResponse(responseCode="201", description = "Order created successfully, TotalSum calculated automatically, Id of Order set automatically"),
+				    @ApiResponse(responseCode="201", description = "Order created successfully"),
 				    @ApiResponse(responseCode="400", description = "Invalid input provided"),
+				    @ApiResponse(responseCode="404", description = "Specified ShoppingCart not found"),
 				    @ApiResponse(responseCode="500", description = "Internal Server Error")
 				})
-	@PostMapping("/orders")
-	public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-	    orderRepository.addOrder(order);
-	    return new ResponseEntity<>(order, HttpStatus.CREATED);
-	}
-	
-	@Operation(summary = "Deletes an existing Order",
-			responses = { 
-				    @ApiResponse(responseCode="200", description = "Order deleted succesfully"),
-				    @ApiResponse(responseCode="400", description = "Invalid input provided"),
-				    @ApiResponse(responseCode="500", description = "Internal Server Error")
-				})
-	@DeleteMapping("/orders")
-	public ResponseEntity<Order> deleteOrder(@RequestBody int orderId) {
-		if(orderRepository.getOrderById(orderId) != null) {
-			orderRepository.deleteOrder(orderId);
-			return new ResponseEntity<>(HttpStatus.OK);
+	@PostMapping("orders/{cartId}")
+	public ResponseEntity<Order> createOrder(@PathVariable int cartId) {
+		if(cartRepository.getCartById(cartId) != null) {
+			orderRepository.addOrder(cartId);
+			return new ResponseEntity<>(orderRepository.getOrderById(orderRepository.getHighestOrderId()), HttpStatus.CREATED);
 		}
 		else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
