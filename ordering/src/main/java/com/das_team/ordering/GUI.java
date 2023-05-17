@@ -3,18 +3,21 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class GUI {
     private JFrame frame;
-    private JTextArea dataTextArea;
+    private JPanel dataPanel;
 
     public GUI() {
         frame = new JFrame("GUI");
@@ -25,19 +28,22 @@ public class GUI {
         refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	dataTextArea.setText(null);
                 refreshData();
             }
         });
 
-        // Create a text area to display the data
-        dataTextArea = new JTextArea();
-        dataTextArea.setEditable(false);
+        // Create panel to hold the tiles
+        dataPanel = new JPanel(new GridLayout(0, 5, 10, 10)); // 4 columns (1 for each group), 10px horizontal and vertical gap
 
-        // Add components to the frame
+        // Create a scroll pane to hold the data panel
+        JScrollPane scrollPane = new JScrollPane(dataPanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+        scrollPane.getHorizontalScrollBar().setUnitIncrement(20);
+
+        // Add components to frame
         frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().add(refreshButton, BorderLayout.NORTH);
-        frame.getContentPane().add(new JScrollPane(dataTextArea), BorderLayout.CENTER);
+        frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
 
         // Set frame to fullscreen
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -47,43 +53,91 @@ public class GUI {
     }
 
     private void refreshData() {
+        // Clear existing tiles
+        dataPanel.removeAll();
+
         // Execute multiple GET requests with different URLs
         executeGetRequest("http://localhost:8080/carts");
         executeGetRequest("http://localhost:8080/carts/1/details");
         executeGetRequest("http://localhost:8080/orders/2");
+        executeGetRequest("http://localhost:8080/orders/2");
+        executeGetRequest("http://localhost:8080/orders/9999999");
+
+        // Refresh the panel
+        dataPanel.revalidate();
+        dataPanel.repaint();
     }
 
     private void executeGetRequest(String urlStr) {
-        try {
-            // Make GET request to specified URL
-            URL url = new URL(urlStr);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
+    	    try {
+    	        // Make GET request to specified URL
+    	        URL url = new URL(urlStr);
+    	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    	        connection.setRequestMethod("GET");
 
-            // Read response
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
-            }
-            reader.close();
+    	        // Get the HTTP response code
+    	        int responseCode = connection.getResponseCode();
 
-            // Parse JSON response
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(response.toString());
+    	     // Read response
+    	        BufferedReader reader;
+    	        if (responseCode >= 200 && responseCode < 300) {
+    	            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+    	        } else {
+    	            InputStream errorStream = connection.getErrorStream();
+    	            if (errorStream != null) {
+    	                reader = new BufferedReader(new InputStreamReader(errorStream));
+    	            } else {
+    	                // Handle the case when the error stream is null
+    	                reader = new BufferedReader(new StringReader("Error stream is null"));
+    	            }
+    	        }
 
-            // Format the JSON object for display
-            String formattedJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
+    	        StringBuilder response = new StringBuilder();
+    	        String line;
+    	        while ((line = reader.readLine()) != null) {
+    	            response.append(line);
+    	        }
+    	        reader.close();
 
-            // Append the formatted JSON to the text area
-            dataTextArea.append("Executed Request: " + urlStr + "\n\n");
-            dataTextArea.append(formattedJson);
-            dataTextArea.append("\n\n--------------------\n\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    	        if (responseCode >= 200 && responseCode < 300) {
+    	            // Parse JSON response
+    	            ObjectMapper objectMapper = new ObjectMapper();
+    	            JsonNode jsonNode = objectMapper.readTree(response.toString());
+
+    	            // Format the JSON object for display
+    	            String formattedJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
+
+    	            // Create a tile to hold the data
+    	            JTextArea tileTextArea = new JTextArea();
+    	            tileTextArea.setText("Executed Request: " + urlStr + "\n\n" + formattedJson);
+    	            tileTextArea.setEditable(false);
+    	            tileTextArea.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+    	            // Create a panel to hold the tile with a custom border
+    	            JPanel tilePanel = new JPanel(new BorderLayout());
+    	            tilePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+    	            tilePanel.add(tileTextArea, BorderLayout.CENTER);
+
+    	            // Add the tile panel to the data panel
+    	            dataPanel.add(tilePanel);
+    	        } else {
+    	            // Create a tile to show the error code
+    	            JTextArea errorTileTextArea = new JTextArea();
+    	            errorTileTextArea.setText("Executed Request: " + urlStr + "\n\n" + "Response Code: " + responseCode);
+    	            errorTileTextArea.setEditable(false);
+    	            errorTileTextArea.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+    	            JPanel errorTilePanel = new JPanel(new BorderLayout());
+    	            errorTilePanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+    	            errorTilePanel.add(errorTileTextArea, BorderLayout.CENTER);
+
+    	            dataPanel.add(errorTilePanel);
+    	        }
+    	    } catch (IOException e) {
+    	        e.printStackTrace();
+    	    }
+    	}
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
