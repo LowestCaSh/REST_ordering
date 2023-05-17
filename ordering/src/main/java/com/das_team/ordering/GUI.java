@@ -25,6 +25,7 @@ public class GUI {
         refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	dataTextArea.setText(null);
                 refreshData();
             }
         });
