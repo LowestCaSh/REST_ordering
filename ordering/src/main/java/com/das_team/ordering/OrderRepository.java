@@ -27,7 +27,6 @@ public class OrderRepository{
 	    }
 	    return null;
     }
-	
 
 	public int getHighestOrderId() {
 	    int highestId = 0;
@@ -53,9 +52,12 @@ public class OrderRepository{
 		order.setCity("REST: City");
 		order.setCountry("REST: Country");
 		order.setStatus("Processing");
+		//Add ShoppingCartDetails to OrderDetails
 		orderDetailRepository.addOrderDetailsFromShoppingCart(order.getOrderId(), cart.getCartDetails());
 		order.setOrderDetails(orderDetailRepository.getOrderDetailsByOrderId(order.getOrderId()));
+		//TODO: Empty the ShppingCartDetails from the cart
 		order.setTotalSum(orderDetailRepository.getOrderDetailsSum(order.getOrderId())); //Calculate the TotalSum of the Order
 		orders.add(order);
+		cartRepository.clearShoppingCartDetails(cartId);
 	}
 }

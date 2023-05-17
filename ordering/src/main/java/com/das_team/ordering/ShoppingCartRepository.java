@@ -68,4 +68,8 @@ public class ShoppingCartRepository{
 		cart.setTotalSum(cartDetailRepository.getCartDetailsSum(cart.getCartId())); //Calculate the TotalSum of the ShoppingCart
 		carts.add(cart);
 	}
+	
+	public void clearShoppingCartDetails(int cartId) {
+		cartDetailRepository.removeShoppingCartDetail(cartId);
+	}
 }

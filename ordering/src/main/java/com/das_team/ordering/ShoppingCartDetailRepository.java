@@ -1,6 +1,7 @@
 package com.das_team.ordering;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ShoppingCartDetailRepository {
@@ -55,5 +56,16 @@ public class ShoppingCartDetailRepository {
 				break;
 			}
 		}
+	}
+	
+	public void removeShoppingCartDetail(int cartId) {
+	    Iterator<ShoppingCartDetail> iterator = cartDetails.iterator();
+	    while (iterator.hasNext()) {
+	        ShoppingCartDetail shoppingCartDetail = iterator.next();
+	        if (shoppingCartDetail.getCartId() == cartId) {
+	            iterator.remove();
+	        }
+	    }
+	    
 	}
 }
