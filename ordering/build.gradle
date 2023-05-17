@@ -21,8 +21,10 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+	implementation "org.springdoc:springdoc-openapi-ui:1.6.8"
 	implementation 'org.glassfish:javax.json:1.0.2'
-	implementation 'io.springfox:springfox-swagger2:3.0.0'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 }
 
