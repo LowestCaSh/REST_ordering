@@ -91,8 +91,8 @@ public class ShoppingCartController {
 				    @ApiResponse(responseCode="500", description = "Internal Server Error")
 				})
 	@DeleteMapping("/carts/{cartId}/details/{productId}")
-	public ResponseEntity<Order> removeShoppingCartDetail(@PathVariable int cartId, @PathVariable int productId) {
-		if(cartRepository.getCartById(cartId) != null) { //TODO: check for product in cartDetails
+	public ResponseEntity<Order> removeShoppingCartDetail(@PathVariable int cartId, @PathVariable String productId) {
+		if(cartRepository.getCartById(cartId) != null) {
 			cartDetailRepository.removeShoppingCartDetail(cartId, productId);
 			//Update cartDetailsList
 			cartRepository.getCartById(cartId).setCartDetails(cartDetailRepository.getCartDetailsByCartId(cartId));

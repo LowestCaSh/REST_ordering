@@ -3,13 +3,13 @@ package com.das_team.ordering;
 public class ShoppingCartDetail {
 	
 	private int cartId;
-	private int productId;
+	private String productId;
 	private String productName;
 	private String unit;
 	private float unitprice;
 	private int quantity;
 	
-	public ShoppingCartDetail(int cartId, int productId, String productName, String unit, float unitprice, int quantity) {
+	public ShoppingCartDetail(int cartId, String productId, String productName, String unit, float unitprice, int quantity) {
 		this.cartId = cartId;
 		this.productId = productId;
 		this.productName = productName;
@@ -31,11 +31,11 @@ public class ShoppingCartDetail {
 		this.cartId = cartId;
 	}
 
-	public int getProductId() {
+	public String getProductId() {
 		return productId;
 	}
 
-	public void setProductId(int productId) {
+	public void setProductId(String productId) {
 		this.productId = productId;
 	}
 
