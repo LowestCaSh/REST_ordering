@@ -4,20 +4,57 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+
 public class ShoppingCartDetailRepository {
 	
 	private List<ShoppingCartDetail> cartDetails = new ArrayList<>();
 	
+	//Change to known URLs
 	public ShoppingCartDetailRepository() {
-		cartDetails.add(new ShoppingCartDetail(1, "5", "Kühlschrank Triple Deluxe", "Stück", 3000.0f, 2));
-		cartDetails.add(new ShoppingCartDetail(1, "3", "Waschmaschine 2679A", "Stück", 399.99f, 1));
-		cartDetails.add(new ShoppingCartDetail(1, "2", "Waschmaschine reparieren", "Stunde", 50.0f, 3));
-		cartDetails.add(new ShoppingCartDetail(2, "10", "Mikrowelle 300W", "Stück", 59.99f, 7));
-		cartDetails.add(new ShoppingCartDetail(2, "3", "Spülmaschine Megasauber", "Stück", 250.50f, 3));
-		cartDetails.add(new ShoppingCartDetail(3, "9", "Küche putzen", "Stunde", 25.0f, 2));
-		cartDetails.add(new ShoppingCartDetail(4, "7", "Herd Superhot", "Stück", 560.99f, 3));
-		cartDetails.add(new ShoppingCartDetail(4, "8", "Toaster für Großfamilie", "Stück", 15.99f, 20));
-		cartDetails.add(new ShoppingCartDetail(4, "11", "Jährliche Wartung", null, 0.0f, 1));
+	    cartDetails.add(new ShoppingCartDetail(1,
+	    		"645c9ffb7d433216f16d7c90",
+	    		getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
+	    		getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 2));
+		cartDetails.add(new ShoppingCartDetail(1,
+				"645c9ffb7d433216f16d7c90",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 1));
+		cartDetails.add(new ShoppingCartDetail(1,
+				"645c9ffb7d433216f16d7c90",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stunde",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 3));
+		cartDetails.add(new ShoppingCartDetail(2,
+				"645c9ffb7d433216f16d7c90",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 7));
+		cartDetails.add(new ShoppingCartDetail(2,
+				"645c9ffb7d433216f16d7c90",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 3));
+		cartDetails.add(new ShoppingCartDetail(3,
+				"645c9ffb7d433216f16d7c90",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 2));
+		cartDetails.add(new ShoppingCartDetail(4,
+				"645c9ffb7d433216f16d7c90",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 3));
+		cartDetails.add(new ShoppingCartDetail(4,
+				"645c9ffb7d433216f16d7c90",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 20));
+		cartDetails.add(new ShoppingCartDetail(4,
+				"645c9ffb7d433216f16d7c90",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), null,
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 1));
 	}
 	
 	public List<ShoppingCartDetail> getCartDetailsByCartId(int cartId) {
@@ -48,7 +85,6 @@ public class ShoppingCartDetailRepository {
 		cartDetails.addAll(shoppingCartDetail);
 	}
 	
-	
 	public void removeShoppingCartDetail(int cartId, String productId) {
 		for(ShoppingCartDetail shoppingCartDetail : cartDetails) {
 			if(shoppingCartDetail.getCartId() == cartId && shoppingCartDetail.getProductId() == productId) {
@@ -67,5 +103,118 @@ public class ShoppingCartDetailRepository {
 	        }
 	    }
 	    
+	}
+	
+	public String getProductNameFromUrl(String productId) {
+		String url = "http://192.168.0.106:8000/v2/products/" + productId;
+	    HttpURLConnection connection = null;
+	    BufferedReader reader = null;
+	    StringBuilder response = new StringBuilder();
+
+	    try {
+	        URL apiUrl = new URL(url);
+	        connection = (HttpURLConnection) apiUrl.openConnection();
+	        connection.setRequestMethod("GET");
+
+	        // Set a default timeout of 1 second (1000 milliseconds)
+	        connection.setConnectTimeout(1000);
+
+	        int responseCode = connection.getResponseCode();
+	        if (responseCode == HttpURLConnection.HTTP_OK) {
+	            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                response.append(line);
+	            }
+	        } else {
+	            return "Error: " + responseCode;
+	        }
+	    } catch (SocketTimeoutException e) {
+	        return "Error: Timeout occurred";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "Error: " + e.getMessage();
+	    } finally {
+	        try {
+	            if (reader != null) {
+	                reader.close();
+	            }
+	            if (connection != null) {
+	                connection.disconnect();
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    try {
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        JsonNode jsonNode = objectMapper.readTree(response.toString());
+	        return jsonNode.get("name").asText();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "Error: Failed to parse JSON response";
+	    }
+	}
+	
+	public float getProductPriceFromUrl(String productId) {
+		String url = "http://192.168.0.106:8000/v2/products/" + productId;
+	    HttpURLConnection connection = null;
+	    BufferedReader reader = null;
+	    StringBuilder response = new StringBuilder();
+
+	    try {
+	        URL apiUrl = new URL(url);
+	        connection = (HttpURLConnection) apiUrl.openConnection();
+	        connection.setRequestMethod("GET");
+
+	        // Set a default timeout of 1 second (1000 milliseconds)
+	        connection.setConnectTimeout(1000);
+
+	        int responseCode = connection.getResponseCode();
+	        if (responseCode == HttpURLConnection.HTTP_OK) {
+	            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                response.append(line);
+	            }
+	        } else {
+	            return 0;
+	        }
+	    } catch (SocketTimeoutException e) {
+	        e.printStackTrace();
+	        return 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return 0;
+	    } finally {
+	        try {
+	            if (reader != null) {
+	                reader.close();
+	            }
+	            if (connection != null) {
+	                connection.disconnect();
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    try {
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        JsonNode jsonNode = objectMapper.readTree(response.toString());
+
+	        JsonNode pricesNode = jsonNode.get("prices");
+	        if (pricesNode != null && pricesNode.isArray() && pricesNode.size() > 0) {
+	            JsonNode lastPriceNode = pricesNode.get(pricesNode.size() - 1);
+	            float lastPrice = (float) lastPriceNode.get("price").asDouble();
+	            return lastPrice;
+	        } else {
+	            return 0;
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return 0;
+	    }
 	}
 }
