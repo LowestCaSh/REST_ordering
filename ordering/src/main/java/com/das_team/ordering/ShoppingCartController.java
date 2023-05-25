@@ -71,6 +71,8 @@ public class ShoppingCartController {
 	public ResponseEntity<ShoppingCartDetail> addShoppingCartDetail(@PathVariable int cartId, @RequestBody ShoppingCartDetail shoppingCartDetail) {
 		if(cartRepository.getCartById(cartId) != null) {
 			shoppingCartDetail.setCartId(cartId);
+			shoppingCartDetail.setProductName(cartDetailRepository.getProductNameFromUrl(shoppingCartDetail.getProductId()));
+			shoppingCartDetail.setUnitprice(cartDetailRepository.getProductPriceFromUrl(shoppingCartDetail.getProductId()));
 			cartDetailRepository.addShoppingCartDetail(shoppingCartDetail);
 			//Update cartDetailsList
 			cartRepository.getCartById(cartId).setCartDetails(cartDetailRepository.getCartDetailsByCartId(cartId));
@@ -91,8 +93,8 @@ public class ShoppingCartController {
 				    @ApiResponse(responseCode="500", description = "Internal Server Error")
 				})
 	@DeleteMapping("/carts/{cartId}/details/{productId}")
-	public ResponseEntity<Order> removeShoppingCartDetail(@PathVariable int cartId, @PathVariable int productId) {
-		if(cartRepository.getCartById(cartId) != null) { //TODO: check for product in cartDetails
+	public ResponseEntity<Order> removeShoppingCartDetail(@PathVariable int cartId, @PathVariable String productId) {
+		if(cartRepository.getCartById(cartId) != null) {
 			cartDetailRepository.removeShoppingCartDetail(cartId, productId);
 			//Update cartDetailsList
 			cartRepository.getCartById(cartId).setCartDetails(cartDetailRepository.getCartDetailsByCartId(cartId));
