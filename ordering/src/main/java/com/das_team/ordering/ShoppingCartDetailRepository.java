@@ -24,37 +24,37 @@ public class ShoppingCartDetailRepository {
 	    		getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
 	    		getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 2));
 		cartDetails.add(new ShoppingCartDetail(1,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 1));
+				"645c9ffb7d433216f16d7c8f",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c8f"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c8f"), 1));
 		cartDetails.add(new ShoppingCartDetail(1,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stunde",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 3));
+				"645c9ffb7d433216f16d7c8e",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c8e"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c8e"), 3));
 		cartDetails.add(new ShoppingCartDetail(2,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 7));
+				"645c9ffb7d433216f16d7c8d",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c8d"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c8d"), 7));
 		cartDetails.add(new ShoppingCartDetail(2,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 3));
+				"645c9ffb7d433216f16d7c8c",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c8c"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c8c"), 3));
 		cartDetails.add(new ShoppingCartDetail(3,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 2));
+				"645c9ffb7d433216f16d7c8b",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c8b"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c8b"), 2));
 		cartDetails.add(new ShoppingCartDetail(4,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 3));
+				"645c9ffb7d433216f16d7c8a",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c8a"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c8a"), 3));
 		cartDetails.add(new ShoppingCartDetail(4,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 20));
+				"645c9ffb7d433216f16d7c89",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c89"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c89"), 20));
 		cartDetails.add(new ShoppingCartDetail(4,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), null,
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 1));
+				"645c9ffb7d433216f16d7c88",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c88"), null,
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c88"), 1));
 	}
 	
 	public List<ShoppingCartDetail> getCartDetailsByCartId(int cartId) {
@@ -106,7 +106,7 @@ public class ShoppingCartDetailRepository {
 	}
 	
 	public String getProductNameFromUrl(String productId) {
-		String url = "http://192.168.0.106:8000/v2/products/" + productId;
+		String url = "http://192.168.0.100:8000/v2/products/" + productId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -158,7 +158,7 @@ public class ShoppingCartDetailRepository {
 	}
 	
 	public float getProductPriceFromUrl(String productId) {
-		String url = "http://192.168.0.106:8000/v2/products/" + productId;
+		String url = "http://192.168.0.100:8000/v2/products/" + productId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();

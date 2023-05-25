@@ -19,25 +19,25 @@ public class OrderDetailRepository {
 	// Change to known URLs
 	public OrderDetailRepository() {
 		orderDetails.add(new OrderDetail(1,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 2));
+				"645c9ffb7d433216f16d7c87",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c87"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c87"), 2));
 		orderDetails.add(new OrderDetail(2,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 1));
+				"645c9ffb7d433216f16d7c86",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c86"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c86"), 1));
 		orderDetails.add(new OrderDetail(1,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stunde",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 3));
+				"645c9ffb7d433216f16d7c85",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c85"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c85"), 3));
 		orderDetails.add(new OrderDetail(2,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 7));
+				"645c9ffb7d433216f16d7c84",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c84"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c84"), 7));
 		orderDetails.add(new OrderDetail(2,
-				"645c9ffb7d433216f16d7c90",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 3));
+				"645c9ffb7d433216f16d7c83",
+				getProductNameFromUrl("645c9ffb7d433216f16d7c83"), "Stück",
+				getProductPriceFromUrl("645c9ffb7d433216f16d7c83"), 3));
 	}
 	
 	public List<OrderDetail> getOrderDetailsByOrderId(int orderId) {
@@ -82,7 +82,7 @@ public class OrderDetailRepository {
 	}
 	
 	public String getProductNameFromUrl(String productId) {
-		String url = "http://192.168.0.106:8000/v2/products/" + productId;
+		String url = "http://192.168.0.100:8000/v2/products/" + productId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -126,7 +126,7 @@ public class OrderDetailRepository {
 	    try {
 	        ObjectMapper objectMapper = new ObjectMapper();
 	        JsonNode jsonNode = objectMapper.readTree(response.toString());
-	        return jsonNode.get("type").asText();
+	        return jsonNode.get("name").asText();
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        return "Error: Failed to parse JSON response";
@@ -134,7 +134,7 @@ public class OrderDetailRepository {
 	}
 	
 	public float getProductPriceFromUrl(String productId) {
-		String url = "http://192.168.0.106:8000/v2/products/" + productId;
+		String url = "http://192.168.0.100:8000/v2/products/" + productId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();

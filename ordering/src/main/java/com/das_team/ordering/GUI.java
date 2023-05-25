@@ -60,8 +60,8 @@ public class GUI {
         executeGetRequest("http://localhost:8080/carts");
         executeGetRequest("http://localhost:8080/carts/1/details");
         executeGetRequest("http://localhost:8080/orders/2");
-        executeGetRequest("http://localhost:8080/orders/2");
-        executeGetRequest("http://localhost:8080/orders/9999999");
+        executeGetRequest("http://192.168.0.100:8000/v2/products");
+        executeGetRequest("http://192.168.0.100:8000/v2/products/645c9ffb7d433216f16d7c87");
 
         // Refresh the panel
         dataPanel.revalidate();
