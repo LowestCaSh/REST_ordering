@@ -22,10 +22,22 @@ public class OrderRepository{
 	
 	// Change to known URLs
 	public OrderRepository() {
-		orders.add(new Order(1, 3,
-				getCustomerNameFromUrl(9), "2024-12-13", "Musterstraße", "1a", "WG 9", 44862, "Zweibrücken", "Deutschland", "verschickt", orderDetailRepository.getOrderDetailsByOrderId(1), orderDetailRepository.getOrderDetailsSum(1)));
-		orders.add(new Order(2, 9,
-				getCustomerNameFromUrl(9), "2005-06-01", "Coole Straße", "29", null, 66482, "Kaiserslautern", "Deutschland", "ausstehend", orderDetailRepository.getOrderDetailsByOrderId(2), orderDetailRepository.getOrderDetailsSum(2)));
+		orders.add(new Order(1, 5,
+				getCustomerNameFromUrl(5), "2024-12-13",
+				getCustomerStreetFromUrl(5),
+				getCustomerPostalCodeFromUrl(5),
+				getCustomerCityFromUrl(5),
+				getCustomerCountryFromUrl(5), "verschickt",
+				orderDetailRepository.getOrderDetailsByOrderId(1),
+				orderDetailRepository.getOrderDetailsSum(1)));
+		orders.add(new Order(2, 3,
+				getCustomerNameFromUrl(3), "2005-06-01",
+				getCustomerStreetFromUrl(3),
+				getCustomerPostalCodeFromUrl(3),
+				getCustomerCityFromUrl(3),
+				getCustomerCountryFromUrl(3), "ausstehend",
+				orderDetailRepository.getOrderDetailsByOrderId(2),
+				orderDetailRepository.getOrderDetailsSum(2)));
 	}
 	
 	public List<Order> getAllOrders() {
@@ -60,12 +72,10 @@ public class OrderRepository{
 		order.setCustomerId(customerId);
 		order.setCustomerName(getCustomerNameFromUrl(customerId));
 		order.setOrderDate(LocalDate.now().toString());
-		order.setStreet("REST: Street");
-		order.setStreetNumber("REST: StreetNumber");
-		order.setAddressAddition("REST: AdressAdition");
-		order.setPostalcode(0);
-		order.setCity("REST: City");
-		order.setCountry("REST: Country");
+		order.setStreet(getCustomerStreetFromUrl(customerId));
+		order.setPostalcode(getCustomerPostalCodeFromUrl(customerId));
+		order.setCity(getCustomerCityFromUrl(customerId));
+		order.setCountry(getCustomerCountryFromUrl(customerId));
 		order.setStatus("Processing");
 		//Add ShoppingCartDetails to OrderDetails
 		orderDetailRepository.addOrderDetailsFromShoppingCart(order.getOrderId(), cart.getCartDetails());
@@ -77,7 +87,7 @@ public class OrderRepository{
 	}
 	
 	public String getCustomerNameFromUrl(int customerId) {
-		String url = "http://127.0.0.1:5000/customers/" + customerId;
+		String url = "http://192.168.0.103:8000/customers/" + customerId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -121,7 +131,216 @@ public class OrderRepository{
 	    try {
 	        ObjectMapper objectMapper = new ObjectMapper();
 	        JsonNode jsonNode = objectMapper.readTree(response.toString());
-	        return jsonNode.get("FirstName").asText() + jsonNode.get("LastName").asText();
+	        return jsonNode.get("customer").get("FirstName").asText() + " " + jsonNode.get("customer").get("LastName").asText();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "Error: Failed to parse JSON response";
+	    }
+	}
+	
+	//CustomerId = AddressID
+	public String getCustomerStreetFromUrl(int customerId) {
+		String url = "http://192.168.0.103:8000/addresses/" + customerId;
+	    HttpURLConnection connection = null;
+	    BufferedReader reader = null;
+	    StringBuilder response = new StringBuilder();
+
+	    try {
+	        URL apiUrl = new URL(url);
+	        connection = (HttpURLConnection) apiUrl.openConnection();
+	        connection.setRequestMethod("GET");
+
+	        // Set a default timeout of 1 second (1000 milliseconds)
+	        connection.setConnectTimeout(1000);
+
+	        int responseCode = connection.getResponseCode();
+	        if (responseCode == HttpURLConnection.HTTP_OK) {
+	            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                response.append(line);
+	            }
+	        } else {
+	            return "Error: " + responseCode;
+	        }
+	    } catch (SocketTimeoutException e) {
+	        return "Error: Timeout occurred";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "Error: " + e.getMessage();
+	    } finally {
+	        try {
+	            if (reader != null) {
+	                reader.close();
+	            }
+	            if (connection != null) {
+	                connection.disconnect();
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    try {
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        JsonNode jsonNode = objectMapper.readTree(response.toString());
+	        return jsonNode.get("address").get("Street").asText();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "Error: Failed to parse JSON response";
+	    }
+	}
+	
+	public String getCustomerPostalCodeFromUrl(int customerId) {
+		String url = "http://192.168.0.103:8000/addresses/" + customerId;
+	    HttpURLConnection connection = null;
+	    BufferedReader reader = null;
+	    StringBuilder response = new StringBuilder();
+
+	    try {
+	        URL apiUrl = new URL(url);
+	        connection = (HttpURLConnection) apiUrl.openConnection();
+	        connection.setRequestMethod("GET");
+
+	        // Set a default timeout of 1 second (1000 milliseconds)
+	        connection.setConnectTimeout(1000);
+
+	        int responseCode = connection.getResponseCode();
+	        if (responseCode == HttpURLConnection.HTTP_OK) {
+	            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                response.append(line);
+	            }
+	        } else {
+	            return "Error: " + responseCode;
+	        }
+	    } catch (SocketTimeoutException e) {
+	        return "Error: Timeout occurred";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "Error: " + e.getMessage();
+	    } finally {
+	        try {
+	            if (reader != null) {
+	                reader.close();
+	            }
+	            if (connection != null) {
+	                connection.disconnect();
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    try {
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        JsonNode jsonNode = objectMapper.readTree(response.toString());
+	        return jsonNode.get("address").get("PostalCode").asText();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "Error: Failed to parse JSON response";
+	    }
+	}
+	
+	public String getCustomerCityFromUrl(int customerId) {
+		String url = "http://192.168.0.103:8000/addresses/" + customerId;
+	    HttpURLConnection connection = null;
+	    BufferedReader reader = null;
+	    StringBuilder response = new StringBuilder();
+
+	    try {
+	        URL apiUrl = new URL(url);
+	        connection = (HttpURLConnection) apiUrl.openConnection();
+	        connection.setRequestMethod("GET");
+
+	        // Set a default timeout of 1 second (1000 milliseconds)
+	        connection.setConnectTimeout(1000);
+
+	        int responseCode = connection.getResponseCode();
+	        if (responseCode == HttpURLConnection.HTTP_OK) {
+	            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                response.append(line);
+	            }
+	        } else {
+	            return "Error: " + responseCode;
+	        }
+	    } catch (SocketTimeoutException e) {
+	        return "Error: Timeout occurred";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "Error: " + e.getMessage();
+	    } finally {
+	        try {
+	            if (reader != null) {
+	                reader.close();
+	            }
+	            if (connection != null) {
+	                connection.disconnect();
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    try {
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        JsonNode jsonNode = objectMapper.readTree(response.toString());
+	        return jsonNode.get("address").get("City").asText();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "Error: Failed to parse JSON response";
+	    }
+	}
+	
+	public String getCustomerCountryFromUrl(int customerId) {
+		String url = "http://192.168.0.103:8000/addresses/" + customerId;
+	    HttpURLConnection connection = null;
+	    BufferedReader reader = null;
+	    StringBuilder response = new StringBuilder();
+
+	    try {
+	        URL apiUrl = new URL(url);
+	        connection = (HttpURLConnection) apiUrl.openConnection();
+	        connection.setRequestMethod("GET");
+
+	        // Set a default timeout of 1 second (1000 milliseconds)
+	        connection.setConnectTimeout(1000);
+
+	        int responseCode = connection.getResponseCode();
+	        if (responseCode == HttpURLConnection.HTTP_OK) {
+	            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                response.append(line);
+	            }
+	        } else {
+	            return "Error: " + responseCode;
+	        }
+	    } catch (SocketTimeoutException e) {
+	        return "Error: Timeout occurred";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "Error: " + e.getMessage();
+	    } finally {
+	        try {
+	            if (reader != null) {
+	                reader.close();
+	            }
+	            if (connection != null) {
+	                connection.disconnect();
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    try {
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        JsonNode jsonNode = objectMapper.readTree(response.toString());
+	        return jsonNode.get("address").get("Country").asText();
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        return "Error: Failed to parse JSON response";

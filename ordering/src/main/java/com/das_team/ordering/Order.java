@@ -9,23 +9,19 @@ public class Order {
     private String customerName;
     private String orderDate;
     private String street;
-    private String streetNumber;
-    private String addressAddition;
-    private int postalcode;
+    private String postalcode;
     private String city;
     private String country;
     private String status;
     private List<OrderDetail> orderDetails;
     private float totalSum;
 
-    public Order(int orderId, int customerId, String customerName, String orderDate, String street, String streetNumber, String addressAddition, int postalcode, String city, String country, String status, List<OrderDetail> orderDetails, float totalSum) {
+    public Order(int orderId, int customerId, String customerName, String orderDate, String street, String postalcode, String city, String country, String status, List<OrderDetail> orderDetails, float totalSum) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.customerName = customerName;
         this.orderDate = orderDate;
         this.street = street;
-        this.streetNumber = streetNumber;
-        this.addressAddition = addressAddition;
         this.postalcode = postalcode;
         this.city = city;
         this.country = country;
@@ -80,27 +76,11 @@ public class Order {
 		this.street = street;
 	}
 
-	public String getStreetNumber() {
-		return streetNumber;
-	}
-
-	public void setStreetNumber(String streetNumber) {
-		this.streetNumber = streetNumber;
-	}
-
-	public String getAddressAddition() {
-		return addressAddition;
-	}
-
-	public void setAddressAddition(String addressAddition) {
-		this.addressAddition = addressAddition;
-	}
-
-	public int getPostalcode() {
+	public String getPostalcode() {
 		return postalcode;
 	}
 
-	public void setPostalcode(int postalcode) {
+	public void setPostalcode(String postalcode) {
 		this.postalcode = postalcode;
 	}
 
