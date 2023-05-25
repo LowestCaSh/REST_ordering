@@ -20,41 +20,41 @@ public class ShoppingCartDetailRepository {
 	//Change to known URLs
 	public ShoppingCartDetailRepository() {
 	    cartDetails.add(new ShoppingCartDetail(1,
-	    		"645c9ffb7d433216f16d7c90",
-	    		getProductNameFromUrl("645c9ffb7d433216f16d7c90"), "Stück",
-	    		getProductPriceFromUrl("645c9ffb7d433216f16d7c90"), 2));
+	    		"645cd9fce3ca8b1fac72544a",
+	    		getDetailNameFromUrl("services", "645cd9fce3ca8b1fac72544a"), "services", "Stunde", 
+	    		getDetailPriceFromUrl("services", "645cd9fce3ca8b1fac72544a"), 2));
 		cartDetails.add(new ShoppingCartDetail(1,
 				"645c9ffb7d433216f16d7c8f",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c8f"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c8f"), 1));
+				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c8f"), "products", "Stück", 
+				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c8f"), 1));
 		cartDetails.add(new ShoppingCartDetail(1,
-				"645c9ffb7d433216f16d7c8e",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c8e"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c8e"), 3));
+				"645cd9fce3ca8b1fac725449",
+				getDetailNameFromUrl("services", "645cd9fce3ca8b1fac725449"), "services", "Stunde", 
+				getDetailPriceFromUrl("services", "645cd9fce3ca8b1fac725449"), 3));
 		cartDetails.add(new ShoppingCartDetail(2,
 				"645c9ffb7d433216f16d7c8d",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c8d"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c8d"), 7));
+				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c8d"), "products", "Stück",
+				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c8d"), 7));
 		cartDetails.add(new ShoppingCartDetail(2,
 				"645c9ffb7d433216f16d7c8c",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c8c"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c8c"), 3));
+				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c8c"), "products", "Stück", 
+				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c8c"), 3));
 		cartDetails.add(new ShoppingCartDetail(3,
-				"645c9ffb7d433216f16d7c8b",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c8b"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c8b"), 2));
+				"645cd9fce3ca8b1fac725448",
+				getDetailNameFromUrl("services", "645cd9fce3ca8b1fac725448"), "services", "Stunde", 
+				getDetailPriceFromUrl("services", "645cd9fce3ca8b1fac725448"), 2));
 		cartDetails.add(new ShoppingCartDetail(4,
 				"645c9ffb7d433216f16d7c8a",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c8a"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c8a"), 3));
+				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c8a"), "products", "Stück",
+				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c8a"), 3));
 		cartDetails.add(new ShoppingCartDetail(4,
-				"645c9ffb7d433216f16d7c89",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c89"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c89"), 20));
+				"645cd9fce3ca8b1fac725447",
+				getDetailNameFromUrl("services", "645cd9fce3ca8b1fac725447"), "services", "Stunde",
+				getDetailPriceFromUrl("services", "645cd9fce3ca8b1fac725447"), 20));
 		cartDetails.add(new ShoppingCartDetail(4,
 				"645c9ffb7d433216f16d7c88",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c88"), null,
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c88"), 1));
+				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c88"), "products", "Stück",
+				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c88"), 1));
 	}
 	
 	public List<ShoppingCartDetail> getCartDetailsByCartId(int cartId) {
@@ -85,9 +85,9 @@ public class ShoppingCartDetailRepository {
 		cartDetails.addAll(shoppingCartDetail);
 	}
 	
-	public void removeShoppingCartDetail(int cartId, String productId) {
+	public void removeShoppingCartDetail(int cartId, String detailId) {
 		for(ShoppingCartDetail shoppingCartDetail : cartDetails) {
-			if(shoppingCartDetail.getCartId() == cartId && shoppingCartDetail.getProductId() == productId) {
+			if(shoppingCartDetail.getCartId() == cartId && shoppingCartDetail.getDetailId() == detailId) {
 				cartDetails.remove(shoppingCartDetail);
 				break;
 			}
@@ -105,8 +105,8 @@ public class ShoppingCartDetailRepository {
 	    
 	}
 	
-	public String getProductNameFromUrl(String productId) {
-		String url = "http://192.168.0.100:8000/v2/products/" + productId;
+	public String getDetailNameFromUrl(String detailType, String productId) {
+		String url = "http://192.168.0.100:8000/v2/" + detailType + "/" + productId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -117,7 +117,7 @@ public class ShoppingCartDetailRepository {
 	        connection.setRequestMethod("GET");
 
 	        // Set a default timeout of 1 second (1000 milliseconds)
-	        connection.setConnectTimeout(1000);
+	        connection.setConnectTimeout(10);
 
 	        int responseCode = connection.getResponseCode();
 	        if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -157,8 +157,8 @@ public class ShoppingCartDetailRepository {
 	    }
 	}
 	
-	public float getProductPriceFromUrl(String productId) {
-		String url = "http://192.168.0.100:8000/v2/products/" + productId;
+	public float getDetailPriceFromUrl(String detailType, String productId) {
+		String url = "http://192.168.0.100:8000/v2/" + detailType + "/" + productId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -169,7 +169,7 @@ public class ShoppingCartDetailRepository {
 	        connection.setRequestMethod("GET");
 
 	        // Set a default timeout of 1 second (1000 milliseconds)
-	        connection.setConnectTimeout(1000);
+	        connection.setConnectTimeout(10);
 
 	        int responseCode = connection.getResponseCode();
 	        if (responseCode == HttpURLConnection.HTTP_OK) {

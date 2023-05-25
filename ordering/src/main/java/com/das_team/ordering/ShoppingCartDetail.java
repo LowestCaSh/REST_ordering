@@ -3,24 +3,51 @@ package com.das_team.ordering;
 public class ShoppingCartDetail {
 	
 	private int cartId;
-	private String productId;
-	private String productName;
+	private String detailId;
+	private String detailName;
+	private String detailType;
 	private String unit;
 	private float unitprice;
 	private int quantity;
 	
-	public ShoppingCartDetail(int cartId, String productId, String productName, String unit, float unitprice, int quantity) {
+	public ShoppingCartDetail(int cartId, String detailId, String detailName, String detailType, String unit, float unitprice, int quantity) {
 		this.cartId = cartId;
-		this.productId = productId;
-		this.productName = productName;
+		this.detailId = detailId;
+		this.detailName = detailName;
+		this.detailType = detailType;
 		this.unit = unit;
 		this.unitprice = unitprice;
 		this.quantity = quantity;
 	}
 	
+
 	//Default Constructor needed for @PostMappings
 	public ShoppingCartDetail() {
 		
+	}
+	
+	public String getDetailId() {
+		return detailId;
+	}
+
+	public void setDetailId(String detailId) {
+		this.detailId = detailId;
+	}
+
+	public String getDetailName() {
+		return detailName;
+	}
+
+	public void setDetailName(String detailName) {
+		this.detailName = detailName;
+	}
+
+	public String getDetailType() {
+		return detailType;
+	}
+
+	public void setDetailType(String detailType) {
+		this.detailType = detailType;
 	}
 
 	public int getCartId() {
@@ -29,22 +56,6 @@ public class ShoppingCartDetail {
 
 	public void setCartId(int cartId) {
 		this.cartId = cartId;
-	}
-
-	public String getProductId() {
-		return productId;
-	}
-
-	public void setProductId(String productId) {
-		this.productId = productId;
-	}
-
-	public String getProductName() {
-		return productName;
-	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
 	}
 
 	public String getUnit() {

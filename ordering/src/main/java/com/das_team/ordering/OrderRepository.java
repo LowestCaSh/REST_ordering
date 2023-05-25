@@ -98,7 +98,7 @@ public class OrderRepository{
 	        connection.setRequestMethod("GET");
 
 	        // Set a default timeout of 1 second (1000 milliseconds)
-	        connection.setConnectTimeout(1000);
+	        connection.setConnectTimeout(10);
 
 	        int responseCode = connection.getResponseCode();
 	        if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -151,7 +151,7 @@ public class OrderRepository{
 	        connection.setRequestMethod("GET");
 
 	        // Set a default timeout of 1 second (1000 milliseconds)
-	        connection.setConnectTimeout(1000);
+	        connection.setConnectTimeout(10);
 
 	        int responseCode = connection.getResponseCode();
 	        if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -203,7 +203,7 @@ public class OrderRepository{
 	        connection.setRequestMethod("GET");
 
 	        // Set a default timeout of 1 second (1000 milliseconds)
-	        connection.setConnectTimeout(1000);
+	        connection.setConnectTimeout(10);
 
 	        int responseCode = connection.getResponseCode();
 	        if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -255,7 +255,7 @@ public class OrderRepository{
 	        connection.setRequestMethod("GET");
 
 	        // Set a default timeout of 1 second (1000 milliseconds)
-	        connection.setConnectTimeout(1000);
+	        connection.setConnectTimeout(10);
 
 	        int responseCode = connection.getResponseCode();
 	        if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -307,7 +307,7 @@ public class OrderRepository{
 	        connection.setRequestMethod("GET");
 
 	        // Set a default timeout of 1 second (1000 milliseconds)
-	        connection.setConnectTimeout(1000);
+	        connection.setConnectTimeout(10);
 
 	        int responseCode = connection.getResponseCode();
 	        if (responseCode == HttpURLConnection.HTTP_OK) {

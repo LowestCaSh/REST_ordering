@@ -34,7 +34,7 @@ public class GUI {
         });
 
         // Create panel to hold the tiles
-        dataPanel = new JPanel(new GridLayout(0, 5, 10, 10)); // 4 columns (1 for each group), 10px horizontal and vertical gap
+        dataPanel = new JPanel(new GridLayout(0, 4, 10, 10)); // 4 columns (1 for each group), 10px horizontal and vertical gap
 
         // Create a scroll pane to hold the data panel
         JScrollPane scrollPane = new JScrollPane(dataPanel);
@@ -58,11 +58,10 @@ public class GUI {
         dataPanel.removeAll();
 
         // Execute multiple GET requests with different URLs
-        executeGetRequest("http://localhost:8080/carts");
-        executeGetRequest("http://localhost:8080/carts/1/details");
-        executeGetRequest("http://localhost:8080/orders/2");
-        executeGetRequest("http://192.168.0.100:8000/v2/products");
-        executeGetRequest("http.//192.168.0.100:8000/v2/products/645c9ffb7d433216f16d7c875");
+        executeGetRequest("http://192.168.0.102:8080/carts/1");
+        executeGetRequest("http://192.168.0.103:8000/customers");
+        executeGetRequest("http://192.168.0.100:8000/v2/products/645c9ffb7d433216f16d7c87");
+        executeGetRequest("http://192.168.0.101:404/api/skills");
 
         // Refresh the panel
         dataPanel.revalidate();
@@ -77,7 +76,7 @@ public class GUI {
     	        connection.setRequestMethod("GET");
     	        
     	        // Set a default timeout of 1 second (1000 milliseconds)
-    	        connection.setConnectTimeout(1000);
+    	        connection.setConnectTimeout(10);
 
     	        // Get the HTTP response code
     	        int responseCode = connection.getResponseCode();

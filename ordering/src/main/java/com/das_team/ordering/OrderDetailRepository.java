@@ -20,24 +20,24 @@ public class OrderDetailRepository {
 	public OrderDetailRepository() {
 		orderDetails.add(new OrderDetail(1,
 				"645c9ffb7d433216f16d7c87",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c87"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c87"), 2));
+				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c87"), "products", "Stück",
+				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c87"), 2));
 		orderDetails.add(new OrderDetail(2,
 				"645c9ffb7d433216f16d7c86",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c86"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c86"), 1));
+				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c86"), "products", "Stück",
+				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c86"), 1));
 		orderDetails.add(new OrderDetail(1,
-				"645c9ffb7d433216f16d7c85",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c85"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c85"), 3));
+				"645cd9fce3ca8b1fac72544c",
+				getDetailNameFromUrl("services", "645cd9fce3ca8b1fac72544c"), "services", "Stunde",
+				getDetailPriceFromUrl("services", "645cd9fce3ca8b1fac72544c"), 3));
 		orderDetails.add(new OrderDetail(2,
 				"645c9ffb7d433216f16d7c84",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c84"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c84"), 7));
+				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c84"), "products", "Stück",
+				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c84"), 7));
 		orderDetails.add(new OrderDetail(2,
-				"645c9ffb7d433216f16d7c83",
-				getProductNameFromUrl("645c9ffb7d433216f16d7c83"), "Stück",
-				getProductPriceFromUrl("645c9ffb7d433216f16d7c83"), 3));
+				"645cd9fce3ca8b1fac72544b",
+				getDetailNameFromUrl("services", "645cd9fce3ca8b1fac72544b"), "services", "Stunde",
+				getDetailPriceFromUrl("services", "645cd9fce3ca8b1fac72544b"), 3));
 	}
 	
 	public List<OrderDetail> getOrderDetailsByOrderId(int orderId) {
@@ -73,16 +73,17 @@ public class OrderDetailRepository {
 		for (ShoppingCartDetail shoppingCartDetail : shoppingCartDetails) {
 			orderDetails.add(new OrderDetail(
 					orderId,
-					shoppingCartDetail.getProductId(),
-					shoppingCartDetail.getProductName(),
+					shoppingCartDetail.getDetailId(),
+					shoppingCartDetail.getDetailName(),
+					shoppingCartDetail.getDetailType(),
 					shoppingCartDetail.getUnit(),
 					shoppingCartDetail.getUnitprice(),
 					shoppingCartDetail.getQuantity()));
 	    }	
 	}
 	
-	public String getProductNameFromUrl(String productId) {
-		String url = "http://192.168.0.100:8000/v2/products/" + productId;
+	public String getDetailNameFromUrl(String detailType, String detailId) {
+		String url = "http://192.168.0.100:8000/v2/" + detailType + "/" + detailId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -93,7 +94,7 @@ public class OrderDetailRepository {
 	        connection.setRequestMethod("GET");
 
 	        // Set a default timeout of 1 second (1000 milliseconds)
-	        connection.setConnectTimeout(1000);
+	        connection.setConnectTimeout(10);
 
 	        int responseCode = connection.getResponseCode();
 	        if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -133,8 +134,8 @@ public class OrderDetailRepository {
 	    }
 	}
 	
-	public float getProductPriceFromUrl(String productId) {
-		String url = "http://192.168.0.100:8000/v2/products/" + productId;
+	public float getDetailPriceFromUrl(String detailType, String productId) {
+		String url = "http://192.168.0.100:8000/v2/" + detailType + "/" + productId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -145,7 +146,7 @@ public class OrderDetailRepository {
 	        connection.setRequestMethod("GET");
 
 	        // Set a default timeout of 1 second (1000 milliseconds)
-	        connection.setConnectTimeout(1000);
+	        connection.setConnectTimeout(10);
 
 	        int responseCode = connection.getResponseCode();
 	        if (responseCode == HttpURLConnection.HTTP_OK) {

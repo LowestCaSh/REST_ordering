@@ -44,47 +44,6 @@ public class OrderController {
             return new ResponseEntity<>(order, HttpStatus.OK);
         }
     }
-	
-	/*
-	@Operation(
-		summary = "Returns all OrderDetails from the specified Order (orderId)",
-		responses = { 
-		    @ApiResponse(responseCode="200", description = "Successfully retrieved OrderDetails from specified Order"),
-		    @ApiResponse(responseCode="404", description = "Specified Order could not be found"),
-		    @ApiResponse(responseCode="500", description = "Internal Server Error")
-		}
-	)
-	@GetMapping("orders/{orderId}/details")
-    public ResponseEntity<List<OrderDetail>> getOrderDetailsByOrderId(@PathVariable int orderId) {
-		//We need to check if the Order with orderId exists
-		if(orderRepository.getOrderById(orderId) != null) {
-			List<OrderDetail> orderDetails = orderDetailRepository.getOrderDetailsByOrderId(orderId);
-            return new ResponseEntity<>(orderDetails, HttpStatus.OK);
-        }
-        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }*/
-	
-	@Operation(summary = "Adds a new OrderDetail for the Specified Order (orderId)",
-			responses = { 
-				    @ApiResponse(responseCode="201", description = "OrderDetail added successfully, Id changed according to chosen PathVariable"),
-				    @ApiResponse(responseCode="400", description = "Invalid input provided"),
-				    @ApiResponse(responseCode="404", description = "Specified Order does not exist"),
-				    @ApiResponse(responseCode="500", description = "Internal Server Error")
-				})
-	@PostMapping("orders/{orderId}/details")
-	public ResponseEntity<OrderDetail> addOrderDetail(@PathVariable int orderId, @RequestBody OrderDetail orderDetail) {
-		if(orderRepository.getOrderById(orderId) != null) {
-			orderDetail.setOrderId(orderId);
-			orderDetailRepository.addOrderDetail(orderDetail);
-			//Add it to the orderDetailsList
-			orderRepository.getOrderById(orderId).setOrderDetails(orderDetailRepository.getOrderDetailsByOrderId(orderId));
-			//Recalculate TotalSum
-			orderRepository.getOrderById(orderId).setTotalSum(orderDetailRepository.getOrderDetailsSum(orderId));
-			return new ResponseEntity<>(orderDetail, HttpStatus.CREATED);
-		}
-		else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    
-	}
 
 	@Operation(summary = "Creates a new Order from specified ShoppingCart",
 			responses = { 

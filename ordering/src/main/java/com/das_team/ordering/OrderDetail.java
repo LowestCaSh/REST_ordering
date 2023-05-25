@@ -3,16 +3,18 @@ package com.das_team.ordering;
 public class OrderDetail {
 	
 	private int orderId;
-	private String productId;
-	private String productName;
+	private String detailId;
+	private String detailName;
+	private String detailType;
 	private String unit;
 	private float unitprice;
 	private int quantity;
 	
-	public OrderDetail(int orderId, String productId, String productName, String unit, float unitprice, int quantity) {
+	public OrderDetail(int orderId, String detailId, String detailName, String detailType, String unit, float unitprice, int quantity) {
 		this.orderId = orderId;
-		this.productId = productId;
-		this.productName = productName;
+		this.detailId = detailId;
+		this.detailName = detailName;
+		this.detailType = detailType;
 		this.unit = unit;
 		this.unitprice = unitprice;
 		this.quantity = quantity;
@@ -31,20 +33,28 @@ public class OrderDetail {
 		this.orderId = orderId;
 	}
 
-	public String getProductId() {
-		return productId;
+	public String getDetailId() {
+		return detailId;
 	}
 
-	public void setProductId(String productId) {
-		this.productId = productId;
-	}
-	
-	public String getProductName() {
-		return productName;
+	public void setDetailId(String detailId) {
+		this.detailId = detailId;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public String getDetailName() {
+		return detailName;
+	}
+
+	public void setDetailName(String detailName) {
+		this.detailName = detailName;
+	}
+
+	public String getDetailType() {
+		return detailType;
+	}
+
+	public void setDetailType(String detailType) {
+		this.detailType = detailType;
 	}
 
 	public String getUnit() {
