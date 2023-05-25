@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 public class OrderController {
 	
 	private OrderRepository orderRepository = new OrderRepository();
-	private OrderDetailRepository orderDetailRepository = new OrderDetailRepository();
 	private ShoppingCartRepository cartRepository = new ShoppingCartRepository();
 	
 	@Operation(summary = "Returns all Orders",
