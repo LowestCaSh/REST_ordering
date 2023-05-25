@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 
 public class GUI {
@@ -61,7 +62,7 @@ public class GUI {
         executeGetRequest("http://localhost:8080/carts/1/details");
         executeGetRequest("http://localhost:8080/orders/2");
         executeGetRequest("http://192.168.0.100:8000/v2/products");
-        executeGetRequest("http://192.168.0.100:8000/v2/products/645c9ffb7d433216f16d7c87");
+        executeGetRequest("http.//192.168.0.100:8000/v2/products/645c9ffb7d433216f16d7c875");
 
         // Refresh the panel
         dataPanel.revalidate();
@@ -74,6 +75,9 @@ public class GUI {
     	        URL url = new URL(urlStr);
     	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
     	        connection.setRequestMethod("GET");
+    	        
+    	        // Set a default timeout of 1 second (1000 milliseconds)
+    	        connection.setConnectTimeout(1000);
 
     	        // Get the HTTP response code
     	        int responseCode = connection.getResponseCode();
@@ -133,6 +137,8 @@ public class GUI {
 
     	            dataPanel.add(errorTilePanel);
     	        }
+    	    } catch (SocketTimeoutException e) {
+    	        e.printStackTrace();
     	    } catch (IOException e) {
     	        e.printStackTrace();
     	    }
