@@ -85,17 +85,17 @@ public class ShoppingCartController {
 	}
 	
 	
-	@Operation(summary = "Removes a Product from a ShoppingCart",
+	@Operation(summary = "Removes a Detail from a ShoppingCart",
 			responses = { 
 				    @ApiResponse(responseCode="200", description = "ShoppingCartDetail removed succesfully"),
 				    @ApiResponse(responseCode="400", description = "Invalid input provided"),
 				    @ApiResponse(responseCode="404", description = "Specified ShoppingCart or Product in Cart does not exist"),
 				    @ApiResponse(responseCode="500", description = "Internal Server Error")
 				})
-	@DeleteMapping("/carts/{cartId}/details/{productId}")
-	public ResponseEntity<Order> removeShoppingCartDetail(@PathVariable int cartId, @PathVariable String productId) {
+	@DeleteMapping("/carts/{cartId}/details/{detailId}")
+	public ResponseEntity<Order> removeShoppingCartDetail(@PathVariable int cartId, @PathVariable String detailId) {
 		if(cartRepository.getCartById(cartId) != null) {
-			cartDetailRepository.removeShoppingCartDetail(cartId, productId);
+			cartDetailRepository.removeShoppingCartDetail(cartId, detailId);
 			//Update cartDetailsList
 			cartRepository.getCartById(cartId).setCartDetails(cartDetailRepository.getCartDetailsByCartId(cartId));
 			//Recalculate TotalSum

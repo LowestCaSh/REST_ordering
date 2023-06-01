@@ -38,14 +38,6 @@ public class ShoppingCartRepository{
 	    return null;
     }
 	
-	public List<String> getAllCartLastUpdated() {
-		List<String> cartUpdates = new ArrayList<>();
-	    for (ShoppingCart cart : carts) {
-	    	cartUpdates.add(cart.getLastUpdated());
-	    }
-	    return cartUpdates;
-    }
-	
 	public int getHighestShoppingCartId() {
 	    int highestId = 0;
 	    for (ShoppingCart cart : carts) {
