@@ -59,9 +59,9 @@ public class GUI {
 
         // Execute multiple GET requests with different URLs
         executeGetRequest("http://192.168.0.102:8080/carts/1");
-        executeGetRequest("http://192.168.0.103:8000/customers");
+        executeGetRequest("http://192.168.0.101:8000/customers");
         executeGetRequest("http://192.168.0.100:8000/v2/products/645c9ffb7d433216f16d7c87");
-        executeGetRequest("http://192.168.0.101:404/api/skills");
+        executeGetRequest("http://192.168.0.107:404/api/skills");
 
         // Refresh the panel
         dataPanel.revalidate();

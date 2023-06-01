@@ -87,7 +87,7 @@ public class OrderRepository{
 	}
 	
 	public String getCustomerNameFromUrl(int customerId) {
-		String url = "http://192.168.0.103:8000/customers/" + customerId;
+		String url = "http://192.168.0.101:8000/customers/" + customerId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -140,7 +140,7 @@ public class OrderRepository{
 	
 	//CustomerId = AddressID
 	public String getCustomerStreetFromUrl(int customerId) {
-		String url = "http://192.168.0.103:8000/addresses/" + customerId;
+		String url = "http://192.168.0.101:8000/addresses/" + customerId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -192,7 +192,7 @@ public class OrderRepository{
 	}
 	
 	public String getCustomerPostalCodeFromUrl(int customerId) {
-		String url = "http://192.168.0.103:8000/addresses/" + customerId;
+		String url = "http://192.168.0.101:8000/addresses/" + customerId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -244,7 +244,7 @@ public class OrderRepository{
 	}
 	
 	public String getCustomerCityFromUrl(int customerId) {
-		String url = "http://192.168.0.103:8000/addresses/" + customerId;
+		String url = "http://192.168.0.101:8000/addresses/" + customerId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -296,7 +296,7 @@ public class OrderRepository{
 	}
 	
 	public String getCustomerCountryFromUrl(int customerId) {
-		String url = "http://192.168.0.103:8000/addresses/" + customerId;
+		String url = "http://192.168.0.101:8000/addresses/" + customerId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
