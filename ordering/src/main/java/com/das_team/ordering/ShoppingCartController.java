@@ -71,8 +71,8 @@ public class ShoppingCartController {
 	public ResponseEntity<ShoppingCartDetail> addShoppingCartDetail(@PathVariable int cartId, @RequestBody ShoppingCartDetail shoppingCartDetail) {
 		if(cartRepository.getCartById(cartId) != null) {
 			shoppingCartDetail.setCartId(cartId);
-			shoppingCartDetail.setDetailName(cartDetailRepository.getDetailNameFromUrl(shoppingCartDetail.getDetailType(), shoppingCartDetail.getDetailId()));
-			shoppingCartDetail.setUnitprice(cartDetailRepository.getDetailPriceFromUrl(shoppingCartDetail.getDetailType(), shoppingCartDetail.getDetailId()));
+			shoppingCartDetail.setDetailName(cartDetailRepository.getDetailInfoFromUrl(shoppingCartDetail.getDetailType(), shoppingCartDetail.getDetailId()).get("name"));
+			shoppingCartDetail.setUnitprice(Float.parseFloat(cartDetailRepository.getDetailInfoFromUrl(shoppingCartDetail.getDetailType(), shoppingCartDetail.getDetailId()).get("price")));
 			cartDetailRepository.addShoppingCartDetail(shoppingCartDetail);
 			//Update cartDetailsList
 			cartRepository.getCartById(cartId).setCartDetails(cartDetailRepository.getCartDetailsByCartId(cartId));

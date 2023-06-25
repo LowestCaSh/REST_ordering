@@ -1,8 +1,10 @@
 package com.das_team.ordering;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,45 +18,65 @@ import java.net.URL;
 public class ShoppingCartDetailRepository {
 	
 	private List<ShoppingCartDetail> cartDetails = new ArrayList<>();
+	private static String url_team404 = "http://192.168.0.100:8000/v2/";
 	
 	//Change to known URLs
 	public ShoppingCartDetailRepository() {
+		Map<String, String> detailInfo;
+		
+		detailInfo = getDetailInfoFromUrl("services", "645cd9fce3ca8b1fac72544a");		
 	    cartDetails.add(new ShoppingCartDetail(1,
 	    		"645cd9fce3ca8b1fac72544a",
-	    		getDetailNameFromUrl("services", "645cd9fce3ca8b1fac72544a"), "services", "Stunde", 
-	    		getDetailPriceFromUrl("services", "645cd9fce3ca8b1fac72544a"), 2));
+	    		detailInfo.get("name"), "services", "Stunde", 
+	    		Float.parseFloat(detailInfo.get("price")), 2));
+	    
+	    detailInfo = getDetailInfoFromUrl("products", "645c9ffb7d433216f16d7c8f");
 		cartDetails.add(new ShoppingCartDetail(1,
 				"645c9ffb7d433216f16d7c8f",
-				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c8f"), "products", "Stück", 
-				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c8f"), 1));
+				detailInfo.get("name"), "products", "Stück", 
+				Float.parseFloat(detailInfo.get("price")), 1));
+		
+		detailInfo = getDetailInfoFromUrl("services", "645cd9fce3ca8b1fac725449");
 		cartDetails.add(new ShoppingCartDetail(1,
 				"645cd9fce3ca8b1fac725449",
-				getDetailNameFromUrl("services", "645cd9fce3ca8b1fac725449"), "services", "Stunde", 
-				getDetailPriceFromUrl("services", "645cd9fce3ca8b1fac725449"), 3));
+				detailInfo.get("name"), "services", "Stunde", 
+				Float.parseFloat(detailInfo.get("price")), 3));
+		
+		detailInfo = getDetailInfoFromUrl("products", "645c9ffb7d433216f16d7c8d");
 		cartDetails.add(new ShoppingCartDetail(2,
 				"645c9ffb7d433216f16d7c8d",
-				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c8d"), "products", "Stück",
-				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c8d"), 7));
+				detailInfo.get("name"), "products", "Stück",
+				Float.parseFloat(detailInfo.get("price")), 7));
+		
+		detailInfo = getDetailInfoFromUrl("products", "645c9ffb7d433216f16d7c8c");
 		cartDetails.add(new ShoppingCartDetail(2,
 				"645c9ffb7d433216f16d7c8c",
-				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c8c"), "products", "Stück", 
-				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c8c"), 3));
+				detailInfo.get("name"), "products", "Stück", 
+				Float.parseFloat(detailInfo.get("price")), 3));
+		
+		detailInfo = getDetailInfoFromUrl("services", "645cd9fce3ca8b1fac725448");
 		cartDetails.add(new ShoppingCartDetail(3,
 				"645cd9fce3ca8b1fac725448",
-				getDetailNameFromUrl("services", "645cd9fce3ca8b1fac725448"), "services", "Stunde", 
-				getDetailPriceFromUrl("services", "645cd9fce3ca8b1fac725448"), 2));
+				detailInfo.get("name"), "services", "Stunde", 
+				Float.parseFloat(detailInfo.get("price")), 2));
+		
+		detailInfo = getDetailInfoFromUrl("products", "645c9ffb7d433216f16d7c8a");
 		cartDetails.add(new ShoppingCartDetail(4,
 				"645c9ffb7d433216f16d7c8a",
-				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c8a"), "products", "Stück",
-				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c8a"), 3));
+				detailInfo.get("name"), "products", "Stück",
+				Float.parseFloat(detailInfo.get("price")), 3));
+		
+		detailInfo = getDetailInfoFromUrl("services", "645cd9fce3ca8b1fac725447");
 		cartDetails.add(new ShoppingCartDetail(4,
 				"645cd9fce3ca8b1fac725447",
-				getDetailNameFromUrl("services", "645cd9fce3ca8b1fac725447"), "services", "Stunde",
-				getDetailPriceFromUrl("services", "645cd9fce3ca8b1fac725447"), 20));
+				detailInfo.get("name"), "services", "Stunde",
+				Float.parseFloat(detailInfo.get("price")), 20));
+		
+		detailInfo = getDetailInfoFromUrl("products", "645c9ffb7d433216f16d7c88");
 		cartDetails.add(new ShoppingCartDetail(4,
 				"645c9ffb7d433216f16d7c88",
-				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c88"), "products", "Stück",
-				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c88"), 1));
+				detailInfo.get("name"), "products", "Stück",
+				Float.parseFloat(detailInfo.get("price")), 1));
 	}
 	
 	public List<ShoppingCartDetail> getCartDetailsByCartId(int cartId) {
@@ -105,8 +127,73 @@ public class ShoppingCartDetailRepository {
 	    
 	}
 	
-	public String getDetailNameFromUrl(String detailType, String productId) {
-		String url = "http://192.168.0.100:8000/v2/" + detailType + "/" + productId;
+	public Map<String, String> getDetailInfoFromUrl(String detailType, String detailId) {
+	    String url = url_team404 + detailType + "/" + detailId;
+	    HttpURLConnection connection = null;
+	    BufferedReader reader = null;
+	    StringBuilder response = new StringBuilder();
+
+	    try {
+	        URL apiUrl = new URL(url);
+	        connection = (HttpURLConnection) apiUrl.openConnection();
+	        connection.setRequestMethod("GET");
+
+	        // Set a default timeout of 1 second (1000 milliseconds)
+	        connection.setConnectTimeout(1000);
+
+	        int responseCode = connection.getResponseCode();
+	        if (responseCode == HttpURLConnection.HTTP_OK) {
+	            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                response.append(line);
+	            }
+	        } else {
+	            throw new RuntimeException("Error: " + responseCode);
+	        }
+	    } catch (SocketTimeoutException e) {
+	        throw new RuntimeException("Error: Timeout occurred");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error: " + e.getMessage());
+	    } finally {
+	        try {
+	            if (reader != null) {
+	                reader.close();
+	            }
+	            if (connection != null) {
+	                connection.disconnect();
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    try {
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        JsonNode jsonNode = objectMapper.readTree(response.toString());
+	        Map<String, String> detailInfo = new HashMap<>();
+	        detailInfo.put("name", jsonNode.get("name").asText());
+	        
+	        JsonNode pricesNode = jsonNode.get("prices");
+	        if (pricesNode != null && pricesNode.isArray() && pricesNode.size() > 0) {
+	            JsonNode lastPriceNode = pricesNode.get(pricesNode.size() - 1);
+	            float lastPrice = (float) lastPriceNode.get("price").asDouble();
+	            detailInfo.put("price", Float.toString(lastPrice));
+	        } else {
+	            detailInfo.put("price", "0.0");
+	        }
+	    
+	        return detailInfo;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error: Failed to parse JSON response");
+	    }
+	}
+	
+	/*
+	public String getDetailNameFromUrl(String detailType, String detailId) {
+		String url = url_team404 + detailType + "/" + detailId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -157,8 +244,8 @@ public class ShoppingCartDetailRepository {
 	    }
 	}
 	
-	public float getDetailPriceFromUrl(String detailType, String productId) {
-		String url = "http://192.168.0.100:8000/v2/" + detailType + "/" + productId;
+	public float getDetailPriceFromUrl(String detailType, String detailId) {
+		String url = url_team404 + detailType + "/" + detailId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -217,4 +304,5 @@ public class ShoppingCartDetailRepository {
 	        return 0;
 	    }
 	}
+	*/
 }

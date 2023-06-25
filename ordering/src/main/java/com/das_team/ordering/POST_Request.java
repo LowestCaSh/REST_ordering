@@ -12,7 +12,7 @@ public class POST_Request {
 
 	public static void main(String[] args) {
 		//POST to another Group
-				String requestBody = "{\"name\":\"Das coole Produkt3\",\"brand\":\"Boss\",\"color\":\"Coool\",\"size\":\"Gigantisch\",\"weight\":99.99,\"description\":\"riesig\",\"category\":\"Nicht nötig\",\"prices\":[{\"validFrom\":\"07.05.2021\",\"validTo\":\"07.05.2022\",\"price\":\"902.00\"}],\"discounted\":true,\"discountAmount\":20,\"stock\":117,\"packagingSize\":\"\",\"packagingWeight\":\"Gewicht7\",\"discontinued\":false,\"modelnumber\":\"54r12opklhdhl5ug\"}"; // Customize the request body here 
+				String requestBody = "{\"name\":\"Das coole Produkt4\",\"brand\":\"Boss\",\"color\":\"Coool\",\"size\":\"Gigantisch\",\"weight\":99.99,\"description\":\"riesig\",\"category\":\"Nicht nötig\",\"prices\":[{\"validFrom\":\"07.05.2021\",\"validTo\":\"07.05.2022\",\"price\":\"902.00\"}],\"discounted\":true,\"discountAmount\":20,\"stock\":117,\"packagingSize\":\"\",\"packagingWeight\":\"Gewicht7\",\"discontinued\":false,\"modelnumber\":\"54r12opklhdhl5ug\"}"; // Customize the request body here 
 				String url = "http://192.168.0.100:8000/v2/products/create";
 				try {
 		            URL apiUrl = new URL(url);

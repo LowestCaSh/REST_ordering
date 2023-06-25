@@ -7,7 +7,9 @@ import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,29 +17,41 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class OrderDetailRepository {
 	
 	private List<OrderDetail> orderDetails = new ArrayList<>();
+	private static String url_team404 = "http://192.168.0.100:8000/v2/";
 	
 	// Change to known URLs
 	public OrderDetailRepository() {
+		Map<String, String> detailInfo;
+		
+		detailInfo = getDetailInfoFromUrl("products", "645c9ffb7d433216f16d7c87");
 		orderDetails.add(new OrderDetail(1,
 				"645c9ffb7d433216f16d7c87",
-				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c87"), "products", "Stück",
-				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c87"), 2));
+				detailInfo.get("name"), "products", "Stück",
+				Float.parseFloat(detailInfo.get("price")), 2));
+		
+		detailInfo = getDetailInfoFromUrl("products", "645c9ffb7d433216f16d7c86");
 		orderDetails.add(new OrderDetail(2,
 				"645c9ffb7d433216f16d7c86",
-				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c86"), "products", "Stück",
-				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c86"), 1));
+				detailInfo.get("name"), "products", "Stück",
+				Float.parseFloat(detailInfo.get("price")), 1));
+		
+		detailInfo = getDetailInfoFromUrl("services", "645cd9fce3ca8b1fac72544c");
 		orderDetails.add(new OrderDetail(1,
 				"645cd9fce3ca8b1fac72544c",
-				getDetailNameFromUrl("services", "645cd9fce3ca8b1fac72544c"), "services", "Stunde",
-				getDetailPriceFromUrl("services", "645cd9fce3ca8b1fac72544c"), 3));
+				detailInfo.get("name"), "services", "Stunde",
+				Float.parseFloat(detailInfo.get("price")), 3));
+		
+		detailInfo = getDetailInfoFromUrl("products", "645c9ffb7d433216f16d7c84");
 		orderDetails.add(new OrderDetail(2,
 				"645c9ffb7d433216f16d7c84",
-				getDetailNameFromUrl("products", "645c9ffb7d433216f16d7c84"), "products", "Stück",
-				getDetailPriceFromUrl("products", "645c9ffb7d433216f16d7c84"), 7));
+				detailInfo.get("name"), "products", "Stück",
+				Float.parseFloat(detailInfo.get("price")), 7));
+		
+		detailInfo = getDetailInfoFromUrl("services", "645cd9fce3ca8b1fac72544b");
 		orderDetails.add(new OrderDetail(2,
 				"645cd9fce3ca8b1fac72544b",
-				getDetailNameFromUrl("services", "645cd9fce3ca8b1fac72544b"), "services", "Stunde",
-				getDetailPriceFromUrl("services", "645cd9fce3ca8b1fac72544b"), 3));
+				detailInfo.get("name"), "services", "Stunde",
+				Float.parseFloat(detailInfo.get("price")), 3));
 	}
 	
 	public List<OrderDetail> getOrderDetailsByOrderId(int orderId) {
@@ -82,8 +96,73 @@ public class OrderDetailRepository {
 	    }	
 	}
 	
+	public Map<String, String> getDetailInfoFromUrl(String detailType, String detailId) {
+	    String url = url_team404 + detailType + "/" + detailId;
+	    HttpURLConnection connection = null;
+	    BufferedReader reader = null;
+	    StringBuilder response = new StringBuilder();
+
+	    try {
+	        URL apiUrl = new URL(url);
+	        connection = (HttpURLConnection) apiUrl.openConnection();
+	        connection.setRequestMethod("GET");
+
+	        // Set a default timeout of 1 second (1000 milliseconds)
+	        connection.setConnectTimeout(1000);
+
+	        int responseCode = connection.getResponseCode();
+	        if (responseCode == HttpURLConnection.HTTP_OK) {
+	            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                response.append(line);
+	            }
+	        } else {
+	            throw new RuntimeException("Error: " + responseCode);
+	        }
+	    } catch (SocketTimeoutException e) {
+	        throw new RuntimeException("Error: Timeout occurred");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error: " + e.getMessage());
+	    } finally {
+	        try {
+	            if (reader != null) {
+	                reader.close();
+	            }
+	            if (connection != null) {
+	                connection.disconnect();
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    try {
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        JsonNode jsonNode = objectMapper.readTree(response.toString());
+	        Map<String, String> detailInfo = new HashMap<>();
+	        detailInfo.put("name", jsonNode.get("name").asText());
+	        
+	        JsonNode pricesNode = jsonNode.get("prices");
+	        if (pricesNode != null && pricesNode.isArray() && pricesNode.size() > 0) {
+	            JsonNode lastPriceNode = pricesNode.get(pricesNode.size() - 1);
+	            float lastPrice = (float) lastPriceNode.get("price").asDouble();
+	            detailInfo.put("price", Float.toString(lastPrice));
+	        } else {
+	            detailInfo.put("price", "0.0");
+	        }
+	    
+	        return detailInfo;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error: Failed to parse JSON response");
+	    }
+	}
+	
+	/*
 	public String getDetailNameFromUrl(String detailType, String detailId) {
-		String url = "http://192.168.0.100:8000/v2/" + detailType + "/" + detailId;
+		String url = url_team404 + detailType + "/" + detailId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -135,7 +214,7 @@ public class OrderDetailRepository {
 	}
 	
 	public float getDetailPriceFromUrl(String detailType, String productId) {
-		String url = "http://192.168.0.100:8000/v2/" + detailType + "/" + productId;
+		String url = url_team404 + detailType + "/" + productId;
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
@@ -194,4 +273,5 @@ public class OrderDetailRepository {
 	        return 0;
 	    }
 	}
+	*/
 }
