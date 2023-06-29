@@ -101,7 +101,12 @@ public class OrderDetailRepository {
 	    HttpURLConnection connection = null;
 	    BufferedReader reader = null;
 	    StringBuilder response = new StringBuilder();
-
+	    
+	    Map<String, String> detailInfo = new HashMap<>();
+	    detailInfo.put("name", "Couldn't retreive Name");
+	    detailInfo.put("price", "0.0");
+	   
+	    
 	    try {
 	        URL apiUrl = new URL(url);
 	        connection = (HttpURLConnection) apiUrl.openConnection();
@@ -118,13 +123,13 @@ public class OrderDetailRepository {
 	                response.append(line);
 	            }
 	        } else {
-	            throw new RuntimeException("Error: " + responseCode);
+	            return detailInfo;
 	        }
 	    } catch (SocketTimeoutException e) {
-	        throw new RuntimeException("Error: Timeout occurred");
+	        return detailInfo;
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        throw new RuntimeException("Error: " + e.getMessage());
+	        return detailInfo;
 	    } finally {
 	        try {
 	            if (reader != null) {
@@ -141,7 +146,7 @@ public class OrderDetailRepository {
 	    try {
 	        ObjectMapper objectMapper = new ObjectMapper();
 	        JsonNode jsonNode = objectMapper.readTree(response.toString());
-	        Map<String, String> detailInfo = new HashMap<>();
+	        
 	        detailInfo.put("name", jsonNode.get("name").asText());
 	        
 	        JsonNode pricesNode = jsonNode.get("prices");
@@ -156,122 +161,7 @@ public class OrderDetailRepository {
 	        return detailInfo;
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        throw new RuntimeException("Error: Failed to parse JSON response");
+	        return detailInfo;
 	    }
 	}
-	
-	/*
-	public String getDetailNameFromUrl(String detailType, String detailId) {
-		String url = url_team404 + detailType + "/" + detailId;
-	    HttpURLConnection connection = null;
-	    BufferedReader reader = null;
-	    StringBuilder response = new StringBuilder();
-
-	    try {
-	        URL apiUrl = new URL(url);
-	        connection = (HttpURLConnection) apiUrl.openConnection();
-	        connection.setRequestMethod("GET");
-
-	        // Set a default timeout of 1 second (1000 milliseconds)
-	        connection.setConnectTimeout(10);
-
-	        int responseCode = connection.getResponseCode();
-	        if (responseCode == HttpURLConnection.HTTP_OK) {
-	            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	            String line;
-	            while ((line = reader.readLine()) != null) {
-	                response.append(line);
-	            }
-	        } else {
-	            return "Error: " + responseCode;
-	        }
-	    } catch (SocketTimeoutException e) {
-	        return "Error: Timeout occurred";
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return "Error: " + e.getMessage();
-	    } finally {
-	        try {
-	            if (reader != null) {
-	                reader.close();
-	            }
-	            if (connection != null) {
-	                connection.disconnect();
-	            }
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-	    }
-
-	    try {
-	        ObjectMapper objectMapper = new ObjectMapper();
-	        JsonNode jsonNode = objectMapper.readTree(response.toString());
-	        return jsonNode.get("name").asText();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return "Error: Failed to parse JSON response";
-	    }
-	}
-	
-	public float getDetailPriceFromUrl(String detailType, String productId) {
-		String url = url_team404 + detailType + "/" + productId;
-	    HttpURLConnection connection = null;
-	    BufferedReader reader = null;
-	    StringBuilder response = new StringBuilder();
-
-	    try {
-	        URL apiUrl = new URL(url);
-	        connection = (HttpURLConnection) apiUrl.openConnection();
-	        connection.setRequestMethod("GET");
-
-	        // Set a default timeout of 1 second (1000 milliseconds)
-	        connection.setConnectTimeout(10);
-
-	        int responseCode = connection.getResponseCode();
-	        if (responseCode == HttpURLConnection.HTTP_OK) {
-	            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-	            String line;
-	            while ((line = reader.readLine()) != null) {
-	                response.append(line);
-	            }
-	        } else {
-	            return 0;
-	        }
-	    } catch (SocketTimeoutException e) {
-	        e.printStackTrace();
-	        return 0;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return 0;
-	    } finally {
-	        try {
-	            if (reader != null) {
-	                reader.close();
-	            }
-	            if (connection != null) {
-	                connection.disconnect();
-	            }
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-	    }
-
-	    try {
-	        ObjectMapper objectMapper = new ObjectMapper();
-	        JsonNode jsonNode = objectMapper.readTree(response.toString());
-
-	        JsonNode pricesNode = jsonNode.get("prices");
-	        if (pricesNode != null && pricesNode.isArray() && pricesNode.size() > 0) {
-	            JsonNode lastPriceNode = pricesNode.get(pricesNode.size() - 1);
-	            float lastPrice = (float) lastPriceNode.get("price").asDouble();
-	            return lastPrice;
-	        } else {
-	            return 0;
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return 0;
-	    }
-	}
-	*/
 }
