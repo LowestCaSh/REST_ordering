@@ -1,8 +1,13 @@
 package com.das_team.ordering;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.*;
+
+import io.github.resilience4j.ratelimiter.RateLimiter;
+import io.github.resilience4j.ratelimiter.RateLimiterConfig;
+import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
@@ -15,6 +20,31 @@ public class OrderController {
 	private OrderRepository orderRepository = new OrderRepository();
 	private ShoppingCartRepository cartRepository = new ShoppingCartRepository();
 	
+	RateLimiterConfig config = RateLimiterConfig.custom()
+            .limitRefreshPeriod(Duration.ofSeconds(1)) //period for refreshing the rate limiter permissions
+            .limitForPeriod(10) // number of permissions available per refresh period
+            .timeoutDuration(Duration.ofMillis(100)) // The duration after which the acquirePermission() call times out
+            .build();
+	
+	// Create registry
+	RateLimiterRegistry rateLimiterRegistry = RateLimiterRegistry.of(config);
+
+	// Use registry
+	RateLimiter rateLimiter = rateLimiterRegistry.rateLimiter("myRateLimiter", config);
+	
+	@GetMapping ("rateLimiterTest")
+	public void cartsFallBackMethod() {
+		for (int i = 0; i < 15; i++) {
+	        boolean permissionGranted = rateLimiter.acquirePermission();
+	        if(permissionGranted) {	
+	        	System.out.println("perm granted");
+	        }
+	        else {
+	        	System.out.println("exceeded");
+	        }
+		}
+	}
+	
 	@Operation(summary = "Returns all Orders",
 			responses = { 
 				    @ApiResponse(responseCode="200", description = "Successfully retrieved all Orders"),
@@ -26,7 +56,6 @@ public class OrderController {
     public List<Order> getAllOrders() {
         return orderRepository.getAllOrders();
     }
-    
 	@Operation(summary = "Returns the Order with the specified Id",
 			responses = { 
 				    @ApiResponse(responseCode="200", description = "Successfully retrieved specified Order"),

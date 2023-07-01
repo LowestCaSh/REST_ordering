@@ -1,17 +1,46 @@
 package com.das_team.ordering;
 
 import java.util.List;
+import java.time.Duration;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.github.resilience4j.ratelimiter.RateLimiterRegistry;
+import io.github.resilience4j.ratelimiter.RateLimiterConfig;
+import io.github.resilience4j.ratelimiter.RateLimiter;
+
 
 @RestController
 public class ShoppingCartController {
 	
 	private ShoppingCartRepository cartRepository = new ShoppingCartRepository();
 	private ShoppingCartDetailRepository cartDetailRepository = new ShoppingCartDetailRepository();
+	
+	RateLimiterConfig config = RateLimiterConfig.custom()
+            .limitRefreshPeriod(Duration.ofSeconds(1)) //period for refreshing the rate limiter permissions
+            .limitForPeriod(10) // number of permissions available per refresh period
+            .timeoutDuration(Duration.ofMillis(100)) // The duration after which the acquirePermission() call times out
+            .build();
+	
+	// Create registry
+	RateLimiterRegistry rateLimiterRegistry = RateLimiterRegistry.of(config);
+
+	// Use registry
+	RateLimiter rateLimiter = rateLimiterRegistry.rateLimiter("myRateLimiter", config);
+	
+	@GetMapping ("rateLimiterTest")
+	public void cartsFallBackMethod() {
+		for (int i = 0; i < 15; i++) {
+	        boolean permissionGranted = rateLimiter.acquirePermission();
+	        if(permissionGranted) {	
+	        	System.out.println("perm granted");
+	        }
+	        else {
+	        	System.out.println("exceeded");
+	        }
+		}
+	}
 	
 	@Operation(summary = "Returns all ShoppingCarts",
 			responses = { 
@@ -21,10 +50,12 @@ public class ShoppingCartController {
 				}
 			)
     @GetMapping ("carts")
+	//@RateLimiter(name = "myRateLimiter", fallbackMethod ="cartsFallbackMethod")
     public List<ShoppingCart> getAllCarts() {
-        return cartRepository.getAllCarts();
+		return cartRepository.getAllCarts();
     }
-    
+	
+
 	@Operation(summary = "Returns the ShoppingCart with the specified Id",
 			responses = { 
 				    @ApiResponse(responseCode="200", description = "Successfully retrieved specifid ShoppingCart"),
