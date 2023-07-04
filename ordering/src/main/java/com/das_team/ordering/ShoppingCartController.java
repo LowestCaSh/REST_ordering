@@ -34,10 +34,10 @@ public class ShoppingCartController {
 		for (int i = 0; i < 15; i++) {
 	        boolean permissionGranted = rateLimiter.acquirePermission();
 	        if(permissionGranted) {	
-	        	System.out.println("perm granted");
+	        	System.out.println("Permission granted");
 	        }
 	        else {
-	        	System.out.println("exceeded");
+	        	System.out.println("Permission exceeded");
 	        }
 		}
 	}
@@ -50,11 +50,16 @@ public class ShoppingCartController {
 				}
 			)
     @GetMapping ("carts")
-	//@RateLimiter(name = "myRateLimiter", fallbackMethod ="cartsFallbackMethod")
     public List<ShoppingCart> getAllCarts() {
-		return cartRepository.getAllCarts();
-    }
-	
+		if(rateLimiter.acquirePermission()) {
+			System.out.println("Permission granted");
+			return cartRepository.getAllCarts();
+		}
+		else {
+			System.out.println("Permission exceeded");
+			return null;
+		}	
+	}
 
 	@Operation(summary = "Returns the ShoppingCart with the specified Id",
 			responses = { 

@@ -20,6 +20,7 @@ public class OrderController {
 	private OrderRepository orderRepository = new OrderRepository();
 	private ShoppingCartRepository cartRepository = new ShoppingCartRepository();
 	
+	/*
 	RateLimiterConfig config = RateLimiterConfig.custom()
             .limitRefreshPeriod(Duration.ofSeconds(1)) //period for refreshing the rate limiter permissions
             .limitForPeriod(10) // number of permissions available per refresh period
@@ -31,20 +32,8 @@ public class OrderController {
 
 	// Use registry
 	RateLimiter rateLimiter = rateLimiterRegistry.rateLimiter("myRateLimiter", config);
-	
-	@GetMapping ("rateLimiterTest")
-	public void cartsFallBackMethod() {
-		for (int i = 0; i < 15; i++) {
-	        boolean permissionGranted = rateLimiter.acquirePermission();
-	        if(permissionGranted) {	
-	        	System.out.println("perm granted");
-	        }
-	        else {
-	        	System.out.println("exceeded");
-	        }
-		}
-	}
-	
+	*/
+
 	@Operation(summary = "Returns all Orders",
 			responses = { 
 				    @ApiResponse(responseCode="200", description = "Successfully retrieved all Orders"),
@@ -54,8 +43,9 @@ public class OrderController {
 			)
     @GetMapping ("orders")
     public List<Order> getAllOrders() {
-        return orderRepository.getAllOrders();
-    }
+        	return orderRepository.getAllOrders();
+	}
+
 	@Operation(summary = "Returns the Order with the specified Id",
 			responses = { 
 				    @ApiResponse(responseCode="200", description = "Successfully retrieved specified Order"),
