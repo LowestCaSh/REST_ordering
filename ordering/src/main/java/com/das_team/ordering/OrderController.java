@@ -42,8 +42,8 @@ public class OrderController {
 				}
 			)
     @GetMapping ("orders")
-    public List<Order> getAllOrders() {
-        	return orderRepository.getAllOrders();
+    public ResponseEntity<List<Order>> getAllOrders() {
+        	return new ResponseEntity<>(orderRepository.getAllOrders(), HttpStatus.OK);
 	}
 
 	@Operation(summary = "Returns the Order with the specified Id",

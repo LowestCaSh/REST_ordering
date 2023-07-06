@@ -20,7 +20,7 @@ public class ShoppingCartController {
 	RateLimiterConfig config = RateLimiterConfig.custom()
             .limitRefreshPeriod(Duration.ofSeconds(1)) //period for refreshing the rate limiter permissions
             .limitForPeriod(10) // number of permissions available per refresh period
-            .timeoutDuration(Duration.ofMillis(100)) // The duration after which the acquirePermission() call times out
+            .timeoutDuration(Duration.ofMillis(1)) // The duration after which the acquirePermission() call times out
             .build();
 	
 	// Create registry
@@ -30,14 +30,14 @@ public class ShoppingCartController {
 	RateLimiter rateLimiter = rateLimiterRegistry.rateLimiter("myRateLimiter", config);
 	
 	@GetMapping ("rateLimiterTest")
-	public void cartsFallBackMethod() {
-		for (int i = 0; i < 15; i++) {
+	public void testRateLimiter() {
+		for (int i = 0; i < 50; i++) {
 	        boolean permissionGranted = rateLimiter.acquirePermission();
 	        if(permissionGranted) {	
-	        	System.out.println("Permission granted");
+	        	System.out.println("Permission granted. Count: " + i);
 	        }
 	        else {
-	        	System.out.println("Permission exceeded");
+	        	System.out.println("Permission exceeded. Count: " + i);
 	        }
 		}
 	}
@@ -46,18 +46,19 @@ public class ShoppingCartController {
 			responses = { 
 				    @ApiResponse(responseCode="200", description = "Successfully retrieved all ShoppingCarts"),
 				    @ApiResponse(responseCode="404", description = "ShoppingCarts could not be found"),
-				    @ApiResponse(responseCode="500", description = "Internal Server Error")
+				    @ApiResponse(responseCode="429", description = "Too many Requests"),
+				    @ApiResponse(responseCode="500", description = "Internal Server Error")   
 				}
 			)
     @GetMapping ("carts")
-    public List<ShoppingCart> getAllCarts() {
+    public ResponseEntity<List<ShoppingCart>> getAllCarts() {
 		if(rateLimiter.acquirePermission()) {
 			System.out.println("Permission granted");
-			return cartRepository.getAllCarts();
+			return new ResponseEntity<>(cartRepository.getAllCarts(), HttpStatus.OK);
 		}
 		else {
 			System.out.println("Permission exceeded");
-			return null;
+			return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
 		}	
 	}
 
