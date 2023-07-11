@@ -42,6 +42,30 @@ public class ShoppingCartController {
 		}
 	}
 	
+	@GetMapping ("nestedLoop")
+	public ResponseEntity<String> nestedLoop() {
+		for (int i = 0; i < 50; i++) {
+			for (int y = 0; y < 50; y++) {
+				
+			}
+		}
+		System.out.println("Loop closed");
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping ("wait20seconds")
+	public ResponseEntity<String> waitForSeconds(){
+		try {
+			Thread.sleep(20000);
+			System.out.println("waited 20 seconds");
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
 	@Operation(summary = "Returns all ShoppingCarts",
 			responses = { 
 				    @ApiResponse(responseCode="200", description = "Successfully retrieved all ShoppingCarts"),
